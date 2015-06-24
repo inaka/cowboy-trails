@@ -1,7 +1,7 @@
 {application, trails,
  [
   {description,
-   "An awesome library called trails erlang cowboy routes"},
+   "A library called trails to do a couple of improvements over erlang Cowboy Routes"},
   {vsn, "0.1"},
   {applications,
     [kernel,

@@ -1,0 +1,13 @@
+{application, trails,
+ [
+  {description,
+   "An awesome library called trails erlang cowboy routes"},
+  {vsn, "0.1"},
+  {applications,
+    [kernel,
+     stdlib,
+     lager
+    ]},
+  {modules, []}
+ ]
+}.

@@ -1,9 +1,9 @@
 PROJECT = trails
 
+SHELL_DEPS = sync
+
 dep_sync =  git git://github.com/inaka/sync.git  0.1.3
 dep_xref_runner = git git://github.com/inaka/xref_runner.git 0.2.2
-
-SHELL_DEPS = sync
 
 include erlang.mk
 

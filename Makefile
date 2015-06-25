@@ -2,7 +2,7 @@ PROJECT = trails
 
 DEPS = cowboy
 
-dep_cowboy = git https://github.com/extend/cowboy.git 1.0.1
+dep_cowboy = git git://github.com/extend/cowboy.git 1.0.1
 
 SHELL_DEPS = sync
 

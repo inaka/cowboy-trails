@@ -53,7 +53,7 @@ basic_compile_test(Config) ->
     [{
       [<<"localhost">>], [],
       [
-        {[<<"such">>,<<"path">>], [], http_such_path_handler,[]},
+        {[<<"such">>, <<"path">>], [], http_such_path_handler,[]},
         {[<<"very">>], [], http_very, []},
         {[], [], http_handler, []}
       ]}
@@ -74,7 +74,7 @@ static_compile_test(Config) ->
     [
       {'_', [],
         [
-          {[], [],cowboy_static, {private_file, something, "index.html"}}
+          {[], [], cowboy_static, {private_file, something, "index.html"}}
         ]}
     ],
   ExpectedResponse = trails:compile(StaticRoute),

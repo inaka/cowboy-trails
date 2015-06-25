@@ -1,6 +1,6 @@
 PROJECT = trails
 
-DEPS = dep_cowboy
+DEPS = cowboy
 
 dep_cowboy = git https://github.com/extend/cowboy.git 1.0.1
 

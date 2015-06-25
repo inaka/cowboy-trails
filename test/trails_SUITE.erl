@@ -34,7 +34,6 @@ end_per_suite(Config) ->
 -spec minimal_compile_test(config()) -> config().
 minimal_compile_test(Config) ->
   MininalRoute = [{'_',[]}],
-  ExpectedResponse = [{'_',[],[]}],
   ExpectedResponse = trails:compile(MininalRoute),
   Config.
 
@@ -49,15 +48,6 @@ basic_compile_test(Config) ->
           {"/", http_handler, []}
        ]}
     ],
-  ExpectedResponse =
-    [{
-      [<<"localhost">>], [],
-      [
-        {[<<"such">>, <<"path">>], [], http_such_path_handler,[]},
-        {[<<"very">>], [], http_very, []},
-        {[], [], http_handler, []}
-      ]}
-    ],
   ExpectedResponse = trails:compile(BasicRoute),
   Config.
 
@@ -67,14 +57,7 @@ static_compile_test(Config) ->
     [
       {'_',
         [
-          {"/", cowboy_static, {private_file, something, "index.html"}}
-        ]}
-    ],
-  ExpectedResponse =
-    [
-      {'_', [],
-        [
-          {[], [], cowboy_static, {private_file, something, "index.html"}}
+          {"/", cowboy_static, {private_file, "index.html"}}
         ]}
     ],
   ExpectedResponse = trails:compile(StaticRoute),

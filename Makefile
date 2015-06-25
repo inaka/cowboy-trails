@@ -1,5 +1,9 @@
 PROJECT = trails
 
+DEPS = dep_cowboy
+
+dep_cowboy = git https://github.com/extend/cowboy.git 1.0.1
+
 SHELL_DEPS = sync
 
 dep_sync =  git git://github.com/inaka/sync.git  0.1.3

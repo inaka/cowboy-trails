@@ -21,6 +21,7 @@ all() ->
 
 -spec init_per_suite(config()) -> config().
 init_per_suite(Config) ->
+  application:ensure_all_started(cowboy),
   Config.
 
 -spec end_per_suite(config()) -> config().
@@ -31,14 +32,15 @@ end_per_suite(Config) ->
 %% Test Cases
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
--spec minimal_compile_test(config()) -> config().
-minimal_compile_test(Config) ->
+-spec minimal_compile_test(config()) -> {atom(), string()}.
+minimal_compile_test(_Config) ->
   MininalRoute = [{'_',[]}],
+  ExpectedResponse = cowboy_router:compile(MininalRoute),
   ExpectedResponse = trails:compile(MininalRoute),
-  Config.
+  {comment, ""}.
 
--spec basic_compile_test(config()) -> config().
-basic_compile_test(Config) ->
+-spec basic_compile_test(config()) -> {atom(), string()}.
+basic_compile_test(_Config) ->
   BasicRoute =
     [
       {"localhost",
@@ -48,11 +50,12 @@ basic_compile_test(Config) ->
           {"/", http_handler, []}
        ]}
     ],
+  ExpectedResponse = cowboy_router:compile(BasicRoute),
   ExpectedResponse = trails:compile(BasicRoute),
-  Config.
+  {comment, ""}.
 
--spec static_compile_test(config()) -> config().
-static_compile_test(Config) ->
+-spec static_compile_test(config()) -> {atom(), string()}.
+static_compile_test(_Config) ->
   StaticRoute =
     [
       {'_',
@@ -60,6 +63,7 @@ static_compile_test(Config) ->
           {"/", cowboy_static, {private_file, "index.html"}}
         ]}
     ],
+  ExpectedResponse = cowboy_router:compile(StaticRoute),
   ExpectedResponse = trails:compile(StaticRoute),
-  Config.
+  {comment, ""}.
 

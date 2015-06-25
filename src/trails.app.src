@@ -1,0 +1,12 @@
+{application, trails,
+ [
+  {description,
+   "A couple of improvements over Cowboy Routes"},
+  {vsn, "0.0.1"},
+  {applications,
+    [kernel,
+     stdlib,
+    ]},
+  {modules, []}
+ ]
+}.

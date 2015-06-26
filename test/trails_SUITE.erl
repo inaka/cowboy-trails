@@ -161,7 +161,11 @@ static_trails4_constructor(_Config) ->
     [
       {'_',
         [
-          trails:trail("/", cowboy_static, {private_file, "index.html"}, #{}, [])
+          trails:trail("/"
+                      , cowboy_static
+                      , {private_file, "index.html"}
+                      , #{}
+                      , [])
         ]}
     ],
   StaticRouteCowboy = get_static_route(),

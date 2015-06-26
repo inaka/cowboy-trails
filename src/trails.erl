@@ -25,17 +25,13 @@
 -type trails() :: [ trails:trail() | cowboy_router:route_path() ].
 -export_type([trails/0]).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Public API.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
 -spec single_host_compile([cowboy_router:route_path()]) ->
   cowboy_router:dispatch_rules().
 single_host_compile(Trails) ->
   compile([{'_', Trails}]).
 
--spec compile(trails()) -> cowboy_router:dispatch_rules().
+-spec compile([{Host::cowboy_router:route_match(), Trails::trails()}]) ->
+  cowboy_router:dispatch_rules().
 compile([]) -> [];
 compile(Routes) ->
   cowboy_router:compile(

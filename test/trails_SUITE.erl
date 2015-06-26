@@ -15,7 +15,7 @@
 -export([basic_trails4_constructor/1]).
 -export([static_trails3_constructor/1]).
 -export([static_trails4_constructor/1]).
-
+-export([basic_trails_routes/1]).
 
 
 -type config() :: [{atom(), term()}].
@@ -171,7 +171,7 @@ basic_trails4_constructor(_Config) ->
   ExpectedResponse = trails:compile(BasicRoute),
   {comment, ""}.
 
- -spec static_trails4_constructor(config()) -> {atom(), string()}.
+-spec static_trails4_constructor(config()) -> {atom(), string()}.
 static_trails4_constructor(_Config) ->
   StaticRoute =
     [
@@ -183,4 +183,19 @@ static_trails4_constructor(_Config) ->
   [{_SingleHost, StaticPath}] = StaticRoute,
   ExpectedResponse = cowboy_router:compile(StaticRoute),
   ExpectedResponse = trails:single_host_compile(StaticPath),
+  {comment, ""}.
+
+-spec basic_trails_routes(config()) -> {atom(), string()}.
+basic_trails_routes(_Config) ->
+  StaticRoutes =
+    [ {"/", cowboy_static, {file, "www/index.html"}}
+    , {"/favicon.ico", cowboy_static, {file, "www/assets/favicon.ico"}}
+    , {"/assets/[...]", cowboy_static, {dir, "www/assets"}}
+    , {"/game/:game_id", cowboy_static, {file, "www/game.html"}}
+    ],
+  Handlers = [trails_test_handler],
+  Trails1 = StaticRoutes ++ trails:trails(Handlers),
+  trails:single_host_compile(Trails1),
+  Trails2 = StaticRoutes ++ trails:trails(trails_test_handler),
+  trails:single_host_compile(Trails2),
   {comment, ""}.

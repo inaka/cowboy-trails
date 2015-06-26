@@ -25,7 +25,6 @@ all() ->
 -spec init_per_suite(config()) -> config().
 init_per_suite(Config) ->
   application:ensure_all_started(cowboy),
-  application:ensure_all_started(lager),
   Config.
 
 -spec end_per_suite(config()) -> config().
@@ -108,7 +107,3 @@ static_single_host_compile_test(_Config) ->
   ExpectedResponse = cowboy_router:compile(StaticRoute),
   ExpectedResponse = trails:single_host_compile(StaticPath),
   {comment, ""}.
-
-
-
-

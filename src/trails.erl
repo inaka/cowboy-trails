@@ -7,6 +7,11 @@
 -export([trail/4]).
 -export([trail/5]).
 -export([trails/1]).
+-export([path_match/1]).
+-export([handler/1]).
+-export([options/1]).
+-export([metadata/1]).
+-export([constraints/1]).
 
 -opaque trail() ::
   #{ path_match  => integer()
@@ -77,11 +82,31 @@ trail(PathMatch, ModuleHandler, Options, MetaData) ->
          , cowboy_router:constraints()) -> trail().
 trail(PathMatch, ModuleHandler, Options, MetaData, Constraints) ->
     #{ path_match  => PathMatch
-     , constraints => Constraints
      , handler     => ModuleHandler
      , options     => Options
      , metadata    => MetaData
+     , constraints => Constraints
      }.
+
+-spec path_match(map()) -> string() | binary().
+path_match(Trail) ->
+ maps:get(path_match, Trail, []).
+
+-spec handler(map()) -> module().
+handler(Trail) ->
+ maps:get(handler, Trail, []).
+
+ -spec options(map()) -> list().
+options(Trail) ->
+ maps:get(options, Trail, []).
+
+ -spec metadata(map()) -> map().
+metadata(Trail) ->
+ maps:get(metadata, Trail, []).
+
+ -spec constraints(map()) -> list().
+constraints(Trail) ->
+ maps:get(constraints, Trail, []).
 
 -spec trails(module() | [module()]) -> cowboy_router:routes().
 trails(Handlers) when is_list(Handlers) ->
@@ -98,3 +123,4 @@ trails([], Acc) ->
   Acc;
 trails([Module | T], Acc) ->
   trails(T, Acc ++ trails_handler:trails(Module)).
+

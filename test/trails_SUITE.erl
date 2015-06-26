@@ -193,13 +193,28 @@ basic_trails_routes(_Config) ->
     , {"/assets/[...]", cowboy_static, {dir, "www/assets"}}
     , {"/game/:game_id", cowboy_static, {file, "www/game.html"}}
     ],
-  Handlers = [trails_test_handler],
-  ExpectedResponse = StaticRoutes ++
+  ExpectedResponse1 = StaticRoutes ++
+    [ {"/api/resource1/[:id]", trails_test_handler, []}
+    , {"/api/:id/resource2", trails_test_handler, [arg0]}
+    , {"/api/resource3/[:id]", trails_test2_handler, []}
+    , {"/api/:id/resource4", trails_test2_handler, [arg0]}
+    ],
+  ExpectedResponse2 = StaticRoutes ++
     [ {"/api/resource1/[:id]", trails_test_handler, []}
     , {"/api/:id/resource2", trails_test_handler, [arg0]}
     ],
-  Trails1 = StaticRoutes ++ trails:trails(Handlers),
-  ExpectedResponse = Trails1,
+  ExpectedResponse3 = StaticRoutes ++
+    [ {"/api/resource3/[:id]", trails_test2_handler, []}
+    , {"/api/:id/resource4", trails_test2_handler, [arg0]}
+    , {"/api/resource1/[:id]", trails_test_handler, []}
+    , {"/api/:id/resource2", trails_test_handler, [arg0]}
+    ],
+  Handlers1 = [trails_test_handler, trails_test2_handler],
+  Handlers2 = [trails_test2_handler, trails_test_handler],
+  Trails1 = StaticRoutes ++ trails:trails(Handlers1),
+  ExpectedResponse1 = Trails1,
   Trails2 = StaticRoutes ++ trails:trails(trails_test_handler),
-  ExpectedResponse = Trails2,
+  ExpectedResponse2 = Trails2,
+  Trails3 = StaticRoutes ++ trails:trails(Handlers2),
+  ExpectedResponse3 = Trails3,
   {comment, ""}.

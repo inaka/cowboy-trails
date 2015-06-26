@@ -52,4 +52,4 @@ trails(Handler) ->
 trails([], Acc) ->
   Acc;
 trails([Module | T], Acc) ->
-  trails(T, trails_handler:trails(Module) ++ Acc).
+  trails(T, Acc ++ trails_handler:trails(Module)).

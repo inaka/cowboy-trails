@@ -25,6 +25,9 @@
 -type trails() :: [ trails:trail() | cowboy_router:route_path() ].
 -export_type([trails/0]).
 
+-type trails() :: [ trails:trail() | cowboy_router:route_path() ].
+-export_type([trails/0]).
+
 -spec single_host_compile([cowboy_router:route_path()]) ->
   cowboy_router:dispatch_rules().
 single_host_compile(Trails) ->

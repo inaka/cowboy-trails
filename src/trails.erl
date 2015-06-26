@@ -73,7 +73,6 @@ trail(PathMatch, ModuleHandler, Options) ->
 trail(PathMatch, ModuleHandler, Options, MetaData) ->
   trail(PathMatch, ModuleHandler, Options, MetaData, []).
 
-
 -spec trail(cowboy_router:route_match()
           , module()
           , any()

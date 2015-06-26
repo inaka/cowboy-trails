@@ -145,9 +145,9 @@ basic_trails4_constructor(_Config) ->
     [
       {'_',
         [
-          trails:trail("/such/path", http_basic_route, [], []),
-          trails:trail("/very", http_very, [], []),
-          trails:trail("/", http_handler, [], [])
+          trails:trail("/such/path", http_basic_route, [], #{}),
+          trails:trail("/very", http_very, [], #{}),
+          trails:trail("/", http_handler, [], #{})
        ]}
     ],
   BasicRouteCowboy = get_basic_route(),
@@ -161,7 +161,7 @@ static_trails4_constructor(_Config) ->
     [
       {'_',
         [
-          trails:trail("/", cowboy_static, {private_file, "index.html"}, [], [])
+          trails:trail("/", cowboy_static, {private_file, "index.html"}, #{}, [])
         ]}
     ],
   StaticRouteCowboy = get_static_route(),

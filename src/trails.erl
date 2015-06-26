@@ -59,13 +59,13 @@ to_route_path(Trail) when is_tuple(Trail) ->
 -spec trail(cowboy_router:route_match()
           , module()) -> cowboy_router:route_path().
 trail(PathMatch, ModuleHandler) ->
-  trail(PathMatch, ModuleHandler, [], [], []).
+  trail(PathMatch, ModuleHandler, [], #{}, []).
 
 -spec trail(cowboy_router:route_match()
           , module()
           , any()) -> cowboy_router:route_path().
 trail(PathMatch, ModuleHandler, Options) ->
-   trail(PathMatch, ModuleHandler, Options, [], []).
+  trail(PathMatch, ModuleHandler, Options, #{}, []).
 
 -spec trail(cowboy_router:route_match()
           , module()

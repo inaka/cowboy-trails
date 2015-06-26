@@ -125,7 +125,16 @@ basic_trails2_constructor(_Config) ->
           trails:trail("/", http_handler)
        ]}
     ],
-  ExpectedResponse = cowboy_router:compile(BasicRoute),
+  BasicRouteCowboy =
+    [
+      {'_',
+        [
+          {"/such/trails/arity/two", trails_handler, []},
+          {"/very", http_very, []},
+          {"/", http_handler, []}
+       ]}
+    ],
+  ExpectedResponse = cowboy_router:compile(BasicRouteCowboy),
   ExpectedResponse = trails:compile(BasicRoute),
   {comment, ""}.
 
@@ -139,7 +148,16 @@ basic_trails3_constructor(_Config) ->
           trails:trail("/", http_handler, [])
        ]}
     ],
-  ExpectedResponse = cowboy_router:compile(BasicRoute),
+  BasicRouteCowboy =
+    [
+      {'_',
+        [
+          {"/such/trails/arity/three", trails_handler, []},
+          {"/very", http_very, []},
+          {"/", http_handler, []}
+       ]}
+    ],
+  ExpectedResponse = cowboy_router:compile(BasicRouteCowboy),
   ExpectedResponse = trails:compile(BasicRoute),
   {comment, ""}.
 
@@ -152,36 +170,59 @@ static_trails3_constructor(_Config) ->
           trails:trail("/", cowboy_static, {private_file, "index.html"})
         ]}
     ],
+  StaticRouteCowboy =
+    [
+      {'_',
+        [
+          {"/", cowboy_static, {private_file, "index.html"}}
+        ]}
+    ],
   [{_SingleHost, StaticPath}] = StaticRoute,
-  ExpectedResponse = cowboy_router:compile(StaticRoute),
+  ExpectedResponse = cowboy_router:compile(StaticRouteCowboy),
   ExpectedResponse = trails:single_host_compile(StaticPath),
   {comment, ""}.
 
 basic_trails4_constructor(_Config) ->
-  BasicRoute =
+  BasicRouteTrails =
     [
       {'_',
         [
-          trails:trail("/such/trails/arity/four", [], trails_handler, []),
-          trails:trail("/very", [], http_very, []),
-          trails:trail("/", [], http_handler, [])
+          trails:trail("/such/trails/arity/four", trails_handler, [], []),
+          trails:trail("/very", http_very, [], []),
+          trails:trail("/", http_handler, [], [])
        ]}
     ],
-  ExpectedResponse = cowboy_router:compile(BasicRoute),
-  ExpectedResponse = trails:compile(BasicRoute),
+  BasicRouteCowboy =
+    [
+      {'_',
+        [
+          {"/such/trails/arity/four", trails_handler, []},
+          {"/very", http_very, []},
+          {"/", http_handler, []}
+       ]}
+    ],
+  ExpectedResponse = cowboy_router:compile(BasicRouteCowboy),
+  ExpectedResponse = trails:compile(BasicRouteTrails),
   {comment, ""}.
 
 -spec static_trails4_constructor(config()) -> {atom(), string()}.
 static_trails4_constructor(_Config) ->
-  StaticRoute =
+  StaticRouteTrails =
     [
       {'_',
         [
-          trails:trail("/", [], cowboy_static, {private_file, "index.html"})
+          trails:trail("/", cowboy_static, {private_file, "index.html"},[])
         ]}
     ],
-  [{_SingleHost, StaticPath}] = StaticRoute,
-  ExpectedResponse = cowboy_router:compile(StaticRoute),
+  StaticRouteCowboy =
+    [
+      {'_',
+        [
+          {"/", cowboy_static, {private_file, "index.html"}}
+        ]}
+    ],
+  [{_SingleHost, StaticPath}] = StaticRouteTrails,
+  ExpectedResponse = cowboy_router:compile(StaticRouteCowboy),
   ExpectedResponse = trails:single_host_compile(StaticPath),
   {comment, ""}.
 

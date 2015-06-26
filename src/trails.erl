@@ -20,10 +20,7 @@
    , options     => any()
    , metadata    => map()
    }.
--export_type([trail/0]).0
-
--type trails() :: [ trails:trail() | cowboy_router:route_path() ].
--export_type([trails/0]).
+-export_type([trail/0]).
 
 -type trails() :: [ trails:trail() | cowboy_router:route_path() ].
 -export_type([trails/0]).

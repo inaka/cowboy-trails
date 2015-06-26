@@ -15,7 +15,7 @@
 -export([basic_trails4_constructor/1]).
 -export([static_trails3_constructor/1]).
 -export([static_trails4_constructor/1]).
-
+-export([basic_trails_routes/1]).
 
 
 -type config() :: [{atom(), term()}].
@@ -171,7 +171,7 @@ basic_trails4_constructor(_Config) ->
   ExpectedResponse = trails:compile(BasicRoute),
   {comment, ""}.
 
- -spec static_trails4_constructor(config()) -> {atom(), string()}.
+-spec static_trails4_constructor(config()) -> {atom(), string()}.
 static_trails4_constructor(_Config) ->
   StaticRoute =
     [
@@ -183,4 +183,38 @@ static_trails4_constructor(_Config) ->
   [{_SingleHost, StaticPath}] = StaticRoute,
   ExpectedResponse = cowboy_router:compile(StaticRoute),
   ExpectedResponse = trails:single_host_compile(StaticPath),
+  {comment, ""}.
+
+-spec basic_trails_routes(config()) -> {atom(), string()}.
+basic_trails_routes(_Config) ->
+  StaticRoutes =
+    [ {"/", cowboy_static, {file, "www/index.html"}}
+    , {"/favicon.ico", cowboy_static, {file, "www/assets/favicon.ico"}}
+    , {"/assets/[...]", cowboy_static, {dir, "www/assets"}}
+    , {"/game/:game_id", cowboy_static, {file, "www/game.html"}}
+    ],
+  ExpectedResponse1 = StaticRoutes ++
+    [ {"/api/resource1/[:id]", trails_test_handler, []}
+    , {"/api/:id/resource2", trails_test_handler, [arg0]}
+    , {"/api/resource3/[:id]", trails_test2_handler, []}
+    , {"/api/:id/resource4", trails_test2_handler, [arg0]}
+    ],
+  ExpectedResponse2 = StaticRoutes ++
+    [ {"/api/resource1/[:id]", trails_test_handler, []}
+    , {"/api/:id/resource2", trails_test_handler, [arg0]}
+    ],
+  ExpectedResponse3 = StaticRoutes ++
+    [ {"/api/resource3/[:id]", trails_test2_handler, []}
+    , {"/api/:id/resource4", trails_test2_handler, [arg0]}
+    , {"/api/resource1/[:id]", trails_test_handler, []}
+    , {"/api/:id/resource2", trails_test_handler, [arg0]}
+    ],
+  Handlers1 = [trails_test_handler, trails_test2_handler],
+  Handlers2 = [trails_test2_handler, trails_test_handler],
+  Trails1 = StaticRoutes ++ trails:trails(Handlers1),
+  ExpectedResponse1 = Trails1,
+  Trails2 = StaticRoutes ++ trails:trails(trails_test_handler),
+  ExpectedResponse2 = Trails2,
+  Trails3 = StaticRoutes ++ trails:trails(Handlers2),
+  ExpectedResponse3 = Trails3,
   {comment, ""}.

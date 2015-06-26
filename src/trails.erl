@@ -1,11 +1,15 @@
 -module(trails).
 
-
 -export([single_host_compile/1]).
 -export([compile/1]).
 -export([trail/2]).
 -export([trail/3]).
 -export([trail/4]).
+-export([trails/1]).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Public API.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 -spec single_host_compile([cowboy_router:route_path()]) ->
   cowboy_router:dispatch_rules().
@@ -33,3 +37,19 @@ trail(PathMatch, ModuleHandler, Options) ->
           , any()) -> cowboy_router:route_path().
 trail(PathMatch, Constraints, ModuleHandler, Options) ->
   {PathMatch, Constraints, ModuleHandler, Options}.
+
+-spec trails(module() | [module()]) -> cowboy_router:routes().
+trails(Handlers) when is_list(Handlers) ->
+  trails(Handlers, []);
+trails(Handler) ->
+  trails([Handler], []).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Private API.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% @private
+trails([], Acc) ->
+  Acc;
+trails([Module | T], Acc) ->
+  trails(T, Acc ++ trails_handler:trails(Module)).

@@ -194,8 +194,12 @@ basic_trails_routes(_Config) ->
     , {"/game/:game_id", cowboy_static, {file, "www/game.html"}}
     ],
   Handlers = [trails_test_handler],
+  ExpectedResponse = StaticRoutes ++
+    [ {"/api/resource1/[:id]", trails_test_handler, []}
+    , {"/api/:id/resource2", trails_test_handler, [arg0]}
+    ],
   Trails1 = StaticRoutes ++ trails:trails(Handlers),
-  trails:single_host_compile(Trails1),
+  ExpectedResponse = Trails1,
   Trails2 = StaticRoutes ++ trails:trails(trails_test_handler),
-  trails:single_host_compile(Trails2),
+  ExpectedResponse = Trails2,
   {comment, ""}.

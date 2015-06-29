@@ -5,8 +5,10 @@
   {vsn, "0.0.1"},
   {applications,
     [kernel,
-     stdlib,
+     stdlib
     ]},
-  {modules, []}
+  {modules, []},
+  {mod, {trails_app, []}},
+  {registered, []}
  ]
 }.

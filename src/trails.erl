@@ -12,6 +12,7 @@
 -export([options/1]).
 -export([metadata/1]).
 -export([constraints/1]).
+-export([store/1, all/0, retrieve/1]).
 
 -opaque trail() ::
   #{ path_match  => integer()
@@ -109,6 +110,22 @@ trails(Handlers) when is_list(Handlers) ->
 trails(Handler) ->
   trails([Handler], []).
 
+-spec store([trail()]) -> ok.
+store(Trails) ->
+  application:ensure_all_started(trails),
+  store1(Trails).
+
+-spec all() -> [trail()].
+all() ->
+  all(ets:select(trails, [{{'$1', '$2'}, [], ['$$']}]), []).
+
+-spec retrieve(any()) -> trail().
+retrieve(Path) ->
+  case ets:lookup(trails, Path) of
+    [{_, Val}] -> Val;
+    []         -> notfound
+  end.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Private API.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -119,3 +136,15 @@ trails([], Acc) ->
 trails([Module | T], Acc) ->
   trails(T, Acc ++ trails_handler:trails(Module)).
 
+%% @private
+store1([]) ->
+  ok;
+store1([Trail = #{path_match := Key} | T]) ->
+  ets:insert(trails, {Key, Trail}),
+  store1(T).
+
+%% @private
+all([], Acc) ->
+  Acc;
+all([[_, Trail] | T], Acc) ->
+  all(T, [Trail | Acc]).

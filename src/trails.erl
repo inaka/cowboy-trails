@@ -23,7 +23,7 @@
    }.
 -export_type([trail/0]).
 
-%% exported from cowboy_router.erl
+%% Exported from cowboy_router.erl
 -type route_match() :: '_' | iodata().
 -type route_path() :: {Path::route_match(), Handler::module(), Opts::any()}
   | {Path::route_match()
@@ -32,9 +32,9 @@
     , Opts::any()}.
 -type route_rule() :: {Host::route_match(), Paths::[route_path()]}
   | {Host::route_match(), cowboy_router:constraints(), Paths::[route_path()]}.
-%%
+%% End of exported functions
 
--type trails() :: [ trails:trail() | route_path() ].
+-type trails() :: [trails:trail() | route_path()].
 -export_type([trails/0]).
 
 -type method() :: get | put | post | delete | patch | head | options.
@@ -88,12 +88,12 @@ trail(PathMatch, ModuleHandler, Options, MetaData) ->
            , map()
            , cowboy_router:constraints()) -> trail().
 trail(PathMatch, ModuleHandler, Options, MetaData, Constraints) ->
-    #{ path_match  => PathMatch
-     , handler     => ModuleHandler
-     , options     => Options
-     , metadata    => MetaData
-     , constraints => Constraints
-     }.
+  #{ path_match  => PathMatch
+   , handler     => ModuleHandler
+   , options     => Options
+   , metadata    => MetaData
+   , constraints => Constraints
+   }.
 
 -spec path_match(map()) -> string() | binary().
 path_match(Trail) ->

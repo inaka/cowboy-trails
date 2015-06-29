@@ -12,6 +12,11 @@ TEST_DEPS = xref_runner cowboy
 
 dep_xref_runner = git git://github.com/inaka/xref_runner.git 0.2.2
 
+PLT_APPS := cowboy
+DIALYZER_DIRS := ebin/
+DIALYZER_OPTS := --verbose --statistics -Werror_handling \
+                 -Wrace_conditions
+
 include erlang.mk
 
 SHELL_OPTS = -s sync

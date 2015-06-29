@@ -82,7 +82,7 @@ trail(PathMatch, ModuleHandler, Options) ->
 trail(PathMatch, ModuleHandler, Options, MetaData) ->
   trail(PathMatch, ModuleHandler, Options, MetaData, []).
 
--spec trail( route_match()
+-spec trail(route_match()
            , module()
            , any()
            , map()

@@ -19,7 +19,7 @@
 -export([basic_trails_routes/1]).
 -export([put_metadata/1]).
 -export([post_metadata/1]).
-
+-export([trails_store/1]).
 
 
 -type config() :: [{atom(), term()}].
@@ -263,4 +263,23 @@ basic_trails_routes(_Config) ->
   ExpectedResponse2 = Trails2,
   Trails3 = StaticRoutes ++ trails:trails(Handlers2),
   ExpectedResponse3 = Trails3,
+  {comment, ""}.
+
+-spec trails_store(config()) -> {atom(), string()}.
+trails_store(_Config) ->
+  Trails = [
+    trails:trail("/assets/[...]", cowboy_static, {dir, "www/assets"}),
+    trails:trail("/such/path", http_basic_route, [], #{}),
+    trails:trail("/very", http_very, [], #{}),
+    trails:trail("/", http_handler, [])
+  ],
+  {not_started, trails} = (catch trails:all()),
+  {not_started, trails} = (catch trails:retrieve("/")),
+  ok = trails:store(Trails),
+  4 = length(trails:all()),
+  #{path_match := "/assets/[...]"} = trails:retrieve("/assets/[...]"),
+  #{path_match := "/such/path"} = trails:retrieve("/such/path"),
+  #{path_match := "/very"} = trails:retrieve("/very"),
+  #{path_match := "/"} = trails:retrieve("/"),
+  notfound = trails:retrieve("/other"),
   {comment, ""}.

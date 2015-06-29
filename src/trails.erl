@@ -129,13 +129,23 @@ store(Trails) ->
 
 -spec all() -> [trail()].
 all() ->
-  all(ets:select(trails, [{{'$1', '$2'}, [], ['$$']}]), []).
+  case application:get_application(trails) of
+    {ok, trails} ->
+      all(ets:select(trails, [{{'$1', '$2'}, [], ['$$']}]), []);
+    _ ->
+      throw({not_started, trails})
+  end.
 
--spec retrieve(any()) -> trail().
+-spec retrieve(route_match()) -> trail().
 retrieve(Path) ->
-  case ets:lookup(trails, Path) of
-    [{_, Val}] -> Val;
-    []         -> notfound
+  case application:get_application(trails) of
+    {ok, trails} ->
+      case ets:lookup(trails, Path) of
+        [{_, Val}] -> Val;
+        []         -> notfound
+      end;
+    _ ->
+      throw({not_started, trails})
   end.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

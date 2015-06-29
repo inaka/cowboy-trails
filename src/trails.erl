@@ -26,7 +26,12 @@
 %% exported from cowboy_router.erl
 -type route_match() :: '_' | iodata().
 -type route_path() :: {Path::route_match(), Handler::module(), Opts::any()}
-  | {Path::route_match(), cowboy_router:constraints(), Handler::module(), Opts::any()}.
+  | {Path::route_match()
+    , cowboy_router:constraints()
+    , Handler::module()
+    , Opts::any()}.
+-type route_rule() :: {Host::route_match(), Paths::[route_path()]}
+  | {Host::route_match(), cowboy_router:constraints(), Paths::[route_path()]}.
 %%
 
 -type trails() :: [ trails:trail() | route_path() ].
@@ -36,8 +41,6 @@
 -export_type([method/0]).
 
 -type metadata() :: #{method() => map()}.
-
-
 
 -spec single_host_compile([route_path()]) ->
   cowboy_router:dispatch_rules().
@@ -51,11 +54,11 @@ compile(Routes) ->
   cowboy_router:compile(
     [{Host, to_route_paths(Trails)} || {Host, Trails} <- Routes]).
 
-  -spec to_route_paths(trail() ) -> cowboy_router:routes().
+-spec to_route_paths([trail()]) -> cowboy_router:routes().
 to_route_paths(Paths) ->
   [to_route_path(Path)|| Path <- Paths].
 
--spec to_route_path(trail()) -> cowboy_router:route_rule().
+-spec to_route_path(trail()) -> route_rule().
 to_route_path(Trail) when is_map(Trail) ->
   PathMatch = maps:get(path_match, Trail),
   ModuleHandler = maps:get(handler, Trail),

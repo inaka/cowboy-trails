@@ -14,16 +14,21 @@
 -export([constraints/1]).
 
 -opaque trail() ::
-  #{ path_match  => integer()
-   , constraints => integer()
+  #{ path_match  => cowboy_router:route_match()
+   , constraints => cowboy_router:constraints()
    , handler     => module()
    , options     => any()
-   , metadata    => map()
+   , metadata    => metadata()
    }.
 -export_type([trail/0]).
 
 -type trails() :: [ trails:trail() | cowboy_router:route_path() ].
 -export_type([trails/0]).
+
+-type method() :: get | put | post | delete | patch | head | options.
+-export_type([method/0]).
+
+-type metadata() :: #{method() => map()}.
 
 -spec single_host_compile([cowboy_router:route_path()]) ->
   cowboy_router:dispatch_rules().

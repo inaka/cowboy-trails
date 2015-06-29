@@ -3,8 +3,8 @@ PROJECT = trails
 DEPS = cowboy cowlib ranch
 
 dep_cowboy = git git://github.com/extend/cowboy.git 1.0.1
-dep_cowlib = git https://github.com/ninenines/cowlib.git 1.0.0
-dep_ranch = git https://github.com/ninenines/ranch.git 1.0.0
+dep_cowlib = git git://github.com/ninenines/cowlib.git 1.0.0
+dep_ranch  = git git://github.com/ninenines/ranch.git 1.0.0
 
 SHELL_DEPS = sync
 

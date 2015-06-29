@@ -41,6 +41,7 @@
 -export_type([method/0]).
 
 -type metadata() :: #{method() => map()}.
+-export_type([metadata/0]).
 
 -spec single_host_compile([route_path()]) ->
   cowboy_router:dispatch_rules().
@@ -69,29 +70,23 @@ to_route_path(Trail) when is_map(Trail) ->
 to_route_path(Trail) when is_tuple(Trail) ->
   Trail.
 
--spec trail(route_match()
-          , module()) -> trail().
+-spec trail(route_match(), module()) -> trail().
 trail(PathMatch, ModuleHandler) ->
   trail(PathMatch, ModuleHandler, [], #{}, []).
 
--spec trail(route_match()
-          , module()
-          , any()) -> trail().
+-spec trail(route_match(), module(), any()) -> trail().
 trail(PathMatch, ModuleHandler, Options) ->
   trail(PathMatch, ModuleHandler, Options, #{}, []).
 
--spec trail(route_match()
-          , module()
-          , any()
-          , map()) -> trail().
+-spec trail(route_match(), module(), any(), map()) -> trail().
 trail(PathMatch, ModuleHandler, Options, MetaData) ->
   trail(PathMatch, ModuleHandler, Options, MetaData, []).
 
--spec trail(route_match()
-          , module()
-          , any()
-          , map()
-         , cowboy_router:constraints()) -> trail().
+-spec trail( route_match()
+           , module()
+           , any()
+           , map()
+           , cowboy_router:constraints()) -> trail().
 trail(PathMatch, ModuleHandler, Options, MetaData, Constraints) ->
     #{ path_match  => PathMatch
      , handler     => ModuleHandler

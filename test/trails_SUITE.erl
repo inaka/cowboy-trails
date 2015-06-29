@@ -191,7 +191,7 @@ basic_metadata(_Config) ->
 
  -spec put_metadata(config()) -> {atom(), string()}.
 put_metadata(_Config) ->
- Metadata = #{ put => #{ description => "Put method"}},
+  Metadata = #{ put => #{ description => "Put method"}},
   Trail =
     trails:trail("/"
                 , cowboy_static
@@ -203,7 +203,7 @@ put_metadata(_Config) ->
 
 -spec post_metadata(config()) -> {atom(), string()}.
 post_metadata(_Config) ->
- Metadata = #{ post => #{ description => "Post method"}},
+  Metadata = #{ post => #{ description => "Post method"}},
   Trail =
     trails:trail("/"
                 , cowboy_static

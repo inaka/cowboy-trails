@@ -13,35 +13,53 @@
 -export([metadata/1]).
 -export([constraints/1]).
 
+
 -opaque trail() ::
-  #{ path_match  => integer()
-   , constraints => integer()
+  #{ path_match  => cowboy_router:route_match()
+   , constraints => cowboy_router:constraints()
    , handler     => module()
    , options     => any()
-   , metadata    => map()
+   , metadata    => metadata()
    }.
 -export_type([trail/0]).
 
--type trails() :: [ trails:trail() | cowboy_router:route_path() ].
+%% Exported from cowboy_router.erl
+-type route_match() :: '_' | iodata().
+-type route_path() :: {Path::route_match(), Handler::module(), Opts::any()}
+  | {Path::route_match()
+    , cowboy_router:constraints()
+    , Handler::module()
+    , Opts::any()}.
+-type route_rule() :: {Host::route_match(), Paths::[route_path()]}
+  | {Host::route_match(), cowboy_router:constraints(), Paths::[route_path()]}.
+%% End of exported functions
+
+-type trails() :: [trails:trail() | route_path()].
 -export_type([trails/0]).
 
--spec single_host_compile([cowboy_router:route_path()]) ->
+-type method() :: get | put | post | delete | patch | head | options.
+-export_type([method/0]).
+
+-type metadata() :: #{method() => map()}.
+-export_type([metadata/0]).
+
+-spec single_host_compile([route_path()]) ->
   cowboy_router:dispatch_rules().
 single_host_compile(Trails) ->
   compile([{'_', Trails}]).
 
--spec compile([{Host::cowboy_router:route_match(), Trails::trails()}]) ->
+-spec compile([{Host::route_match(), Trails::trails()}]) ->
   cowboy_router:dispatch_rules().
 compile([]) -> [];
 compile(Routes) ->
   cowboy_router:compile(
     [{Host, to_route_paths(Trails)} || {Host, Trails} <- Routes]).
 
-  -spec to_route_paths(trail()) -> cowboy_router:route_path().
+-spec to_route_paths([trail()]) -> cowboy_router:routes().
 to_route_paths(Paths) ->
   [to_route_path(Path)|| Path <- Paths].
 
--spec to_route_path(trail()) -> cowboy_router:route_path().
+-spec to_route_path(trail()) -> route_rule().
 to_route_path(Trail) when is_map(Trail) ->
   PathMatch = maps:get(path_match, Trail),
   ModuleHandler = maps:get(handler, Trail),
@@ -52,36 +70,30 @@ to_route_path(Trail) when is_map(Trail) ->
 to_route_path(Trail) when is_tuple(Trail) ->
   Trail.
 
--spec trail(cowboy_router:route_match()
-          , module()) -> cowboy_router:route_path().
+-spec trail(route_match(), module()) -> trail().
 trail(PathMatch, ModuleHandler) ->
   trail(PathMatch, ModuleHandler, [], #{}, []).
 
--spec trail(cowboy_router:route_match()
-          , module()
-          , any()) -> cowboy_router:route_path().
+-spec trail(route_match(), module(), any()) -> trail().
 trail(PathMatch, ModuleHandler, Options) ->
   trail(PathMatch, ModuleHandler, Options, #{}, []).
 
--spec trail(cowboy_router:route_match()
-          , module()
-          , any()
-          , map()) -> cowboy_router:route_path().
+-spec trail(route_match(), module(), any(), map()) -> trail().
 trail(PathMatch, ModuleHandler, Options, MetaData) ->
   trail(PathMatch, ModuleHandler, Options, MetaData, []).
 
--spec trail(cowboy_router:route_match()
-          , module()
-          , any()
-          , map()
-         , cowboy_router:constraints()) -> trail().
+-spec trail(route_match()
+           , module()
+           , any()
+           , map()
+           , cowboy_router:constraints()) -> trail().
 trail(PathMatch, ModuleHandler, Options, MetaData, Constraints) ->
-    #{ path_match  => PathMatch
-     , handler     => ModuleHandler
-     , options     => Options
-     , metadata    => MetaData
-     , constraints => Constraints
-     }.
+  #{ path_match  => PathMatch
+   , handler     => ModuleHandler
+   , options     => Options
+   , metadata    => MetaData
+   , constraints => Constraints
+   }.
 
 -spec path_match(map()) -> string() | binary().
 path_match(Trail) ->

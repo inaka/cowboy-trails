@@ -17,6 +17,9 @@
 -export([static_trails4_constructor/1]).
 -export([basic_metadata/1]).
 -export([basic_trails_routes/1]).
+-export([put_metadata/1]).
+-export([post_metadata/1]).
+
 
 
 -type config() :: [{atom(), term()}].
@@ -180,7 +183,31 @@ basic_metadata(_Config) ->
   Trail =
     trails:trail("/"
                 , cowboy_static
-                , {private_file, "index.html"}
+                , {private_file, "index1.html"}
+                , Metadata
+                , []),
+  Metadata = trails:metadata(Trail),
+  {comment, ""}.
+
+ -spec put_metadata(config()) -> {atom(), string()}.
+put_metadata(_Config) ->
+  Metadata = #{ put => #{ description => "Put method"}},
+  Trail =
+    trails:trail("/"
+                , cowboy_static
+                , {private_file, "index2.html"}
+                , Metadata
+                , []),
+  Metadata = trails:metadata(Trail),
+  {comment, ""}.
+
+-spec post_metadata(config()) -> {atom(), string()}.
+post_metadata(_Config) ->
+  Metadata = #{ post => #{ description => "Post method"}},
+  Trail =
+    trails:trail("/"
+                , cowboy_static
+                , {private_file, "index3.html"}
                 , Metadata
                 , []),
   Metadata = trails:metadata(Trail),

@@ -18,24 +18,36 @@ stop() ->
 %% @private
 start(_StartType, _StartArgs) ->
   {ok, Pid} = example_sup:start_link(),
-  start_listeners(),
+  {ok, _Pid} = start_listeners(),
   {ok, Pid}.
 
 %% @private
 stop(_State) ->
-  cowboy:stop_listener(example_http),
+  ok = cowboy:stop_listener(example_http),
   ok.
 
 start_listeners() ->
   {ok, Port} = application:get_env(example, http_port),
   {ok, ListenerCount} = application:get_env(example, http_listener_count),
-  Trails =
-    [
-      trails:trail(<<"/">>, example_root_handler, [],  #{get => #{}})
-     ,trails:trail(<<"/description">>, example_description_handler, [],  #{get => #{}})
-     ,trails:trail(<<"/message/[:eco]">>, example_eco_handler, [],  #{get => #{}, put => #{}})
-     ,trails:trail(<<"/[...]">>, cowboy_static, {priv_dir, example, "",[{mimetypes, cow_mimetypes, all}]},  #{get => #{}})
-    ],
+
+  RootTrail = trails:trail(<<"/">>, example_root_handler, [],  #{get => #{}}),
+  DescriptionTrail =
+    trails:trail(<<"/description">>
+                , example_description_handler
+                , []
+                ,  #{get => #{}}),
+  MessageTrail = trails:trail(<<"/message/[:eco]">>
+                        , example_eco_handler
+                        , []
+                        ,  #{get => #{}, put => #{}}),
+  StaticTrail = trails:trail(<<"/[...]">>
+                       , cowboy_static
+                       , {priv_dir
+                         , example
+                         , ""
+                         , [{mimetypes, cow_mimetypes, all}]}
+                       ,  #{get => #{}}),
+  Trails = [ RootTrail , DescriptionTrail, MessageTrail, StaticTrail],
   trails:store(Trails),
   Dispatch =  trails:compile( [{'_', Trails}]),
 

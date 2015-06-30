@@ -23,33 +23,39 @@ start(_StartType, _StartArgs) ->
 
 %% @private
 stop(_State) ->
-  ok = cowboy:stop_listener(example_http),
-  ok.
+  ok = cowboy:stop_listener(example_http).
 
 start_listeners() ->
   {ok, Port} = application:get_env(example, http_port),
   {ok, ListenerCount} = application:get_env(example, http_listener_count),
 
-  RootTrail = trails:trail(<<"/">>, example_root_handler, [],  #{get => #{}}),
+  RootTrail =
+    trails:trail(<<"/">>
+                , example_root_handler
+                , []
+                ,  #{get => #{desc => "This is the root path"}}),
   DescriptionTrail =
     trails:trail(<<"/description">>
                 , example_description_handler
                 , []
-                ,  #{get => #{}}),
-  MessageTrail = trails:trail(<<"/message/[:echo]">>
-                        , example_echo_handler
-                        , []
-                        ,  #{get => #{}, put => #{}}),
-  StaticTrail = trails:trail(<<"/[...]">>
-                       , cowboy_static
-                       , {priv_dir
-                         , example
-                         , ""
-                         , [{mimetypes, cow_mimetypes, all}]}
-                       ,  #{get => #{}}),
+                , #{get => #{desc => "Retrives trails's server description"}}),
+  MessageTrail =
+  trails:trail(<<"/message/[:echo]">>
+              , example_echo_handler
+              , []
+              ,  #{ get => #{desc => "Gets echo var in the server"}
+              ,   , put => #{desc => "Sets echo var in the server"}}),
+  StaticTrail =
+    trails:trail(<<"/[...]">>
+                , cowboy_static
+                , {priv_dir
+                  , example
+                  , ""
+                  , [{mimetypes, cow_mimetypes, all}]}
+                ,  #{get => ##{desc => "Static Data"}}),
   Trails = [ RootTrail , DescriptionTrail, MessageTrail, StaticTrail],
   trails:store(Trails),
-  Dispatch =  trails:compile( [{'_', Trails}]),
+  Dispatch = trails:single_host_compile(Trails),
 
   RanchOptions = [{port, Port}  ],
   CowboyOptions =

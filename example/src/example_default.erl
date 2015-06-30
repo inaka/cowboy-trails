@@ -24,14 +24,12 @@ content_types_accepted(Req, State) ->
                      <<"PUT">> ->
                          handle_put;
                      <<"POST">> ->
-                         handle_post;
-                     <<"PATCH">> ->
-                         handle_patch
+                         handle_post
                  end,
   {[{<<"text/plain">>, HandleMethod}], Req1, State}.
 
 content_types_provided(Req, State) ->
-    {[{{<<"application">>, <<"Erlang Data">>, []}, handle_get}], Req, State}.
+    {[{{<<"application">>, <<"erlang">>, []}, handle_get}], Req, State}.
 
 forbidden(Req, State) ->
     {false, Req, State}.

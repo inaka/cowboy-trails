@@ -29,7 +29,7 @@ content_types_accepted(Req, State) ->
   {[{<<"text/plain">>, HandleMethod}], Req1, State}.
 
 content_types_provided(Req, State) ->
-    {[{{<<"application">>, <<"erlang">>, []}, handle_get}], Req, State}.
+    {[{{<<"application">>, <<"text/plain">>, []}, handle_get}], Req, State}.
 
 forbidden(Req, State) ->
     {false, Req, State}.

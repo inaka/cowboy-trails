@@ -25,6 +25,5 @@ allowed_methods(Req, State) ->
 %% internal
 handle_get(Req, State) ->
   Body = trails:all(),
-  lager:info("~p", [Body]),
   Req1 = cowboy_req:set_resp_header(<<"content-type:">>, "Erlang Data", Req),
   {io_lib:format("~p~n", [Body]), Req1, State}.

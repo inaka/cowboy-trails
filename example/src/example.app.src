@@ -1,0 +1,15 @@
+{application, example,
+ [
+  {description,
+   "Cowboys Trails Basic Example."},
+  {vsn, "0.1"},
+  {applications,
+    [kernel,
+     stdlib,
+     lager,
+     cowboy
+    ]},
+  {modules, []},
+  {mod, {example, []}}
+ ]
+}.

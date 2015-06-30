@@ -28,7 +28,6 @@ stop(_State) ->
 start_listeners() ->
   {ok, Port} = application:get_env(example, http_port),
   {ok, ListenerCount} = application:get_env(example, http_listener_count),
-
   DescriptionTrail =
     trails:trail(<<"/description">>
                 , example_description_handler
@@ -39,7 +38,7 @@ start_listeners() ->
               , example_echo_handler
               , []
               ,  #{ get => #{desc => "Gets echo var in the server"}
-              ,   , put => #{desc => "Sets echo var in the server"}}),
+                  , put => #{desc => "Sets echo var in the server"}}),
   StaticTrail =
     trails:trail(<<"/[...]">>
                 , cowboy_static
@@ -47,7 +46,7 @@ start_listeners() ->
                   , example
                   , ""
                   , [{mimetypes, cow_mimetypes, all}]}
-                ,  #{get => ##{desc => "Static Data"}}),
+                ,  #{get => #{desc => "Static Data"}}),
   Trails = [DescriptionTrail, MessageTrail, StaticTrail],
   trails:store(Trails),
   Dispatch = trails:single_host_compile(Trails),

@@ -29,11 +29,6 @@ start_listeners() ->
   {ok, Port} = application:get_env(example, http_port),
   {ok, ListenerCount} = application:get_env(example, http_listener_count),
 
-  RootTrail =
-    trails:trail(<<"/">>
-                , example_root_handler
-                , []
-                ,  #{get => #{desc => "This is the root path"}}),
   DescriptionTrail =
     trails:trail(<<"/description">>
                 , example_description_handler
@@ -53,7 +48,7 @@ start_listeners() ->
                   , ""
                   , [{mimetypes, cow_mimetypes, all}]}
                 ,  #{get => ##{desc => "Static Data"}}),
-  Trails = [ RootTrail , DescriptionTrail, MessageTrail, StaticTrail],
+  Trails = [DescriptionTrail, MessageTrail, StaticTrail],
   trails:store(Trails),
   Dispatch = trails:single_host_compile(Trails),
 

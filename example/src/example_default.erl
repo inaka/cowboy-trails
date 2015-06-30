@@ -13,10 +13,10 @@
 
 %% cowboy
 init(_Transport, _Req, _Opts) ->
-    {upgrade, protocol, cowboy_rest}.
+  {upgrade, protocol, cowboy_rest}.
 
 rest_init(Req, _Opts) ->
-    {ok, Req, #{}}.
+  {ok, Req, #{}}.
 
 content_types_accepted(Req, State) ->
   {Method, Req1} = cowboy_req:method(Req),
@@ -29,11 +29,11 @@ content_types_accepted(Req, State) ->
   {[{<<"text/plain">>, HandleMethod}], Req1, State}.
 
 content_types_provided(Req, State) ->
-    {[{{<<"application">>, <<"text/plain">>, []}, handle_get}], Req, State}.
+  {[{{<<"application">>, <<"text/plain">>, []}, handle_get}], Req, State}.
 
 forbidden(Req, State) ->
-    {false, Req, State}.
+  {false, Req, State}.
 
 resource_exists(Req, State) ->
-    {Method, Req1} = cowboy_req:method(Req),
-    {Method =/= <<"POST">>, Req1, State}.
+  {Method, Req1} = cowboy_req:method(Req),
+  {Method =/= <<"POST">>, Req1, State}.

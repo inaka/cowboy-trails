@@ -21,7 +21,7 @@
 
 %% cowboy
 allowed_methods(Req, State) ->
-    {[<<"GET">>, <<"PUT">>], Req, State}.
+  {[<<"GET">>, <<"PUT">>], Req, State}.
 
 %% internal
 handle_get(Req, State) ->

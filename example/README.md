@@ -24,18 +24,37 @@ Eco example
 You can set a response on the server with PUT http://localhost:8080/message/echo
 ```
 curl -v -H "Content-Type: text/plain" -X PUT http://localhost:8080/message/yahooooo!!!
-HTTP/1.1 200 OK
-connection: keep-alive
-server: Cowboy
-date: Tue, 30 Jun 2015 18:48:00 GMT
-content-length: 22
-content-type: application/json
-
-Got a eco! yahooooo!!!⏎
+< HTTP/1.1 200 OK
+< connection: keep-alive
+* Server Cowboy is not blacklisted
+< server: Cowboy
+< date: Tue, 30 Jun 2015 21:12:06 GMT
+< content-length: 25
+< content-type: application/text/plain
+<
+* Connection #0 to host localhost left intact
+You put a echo! yahooooo!⏎
 ```
 
 Description example
 if you run this curl command, you will see all trails description of this server
 ```
 curl -i http://localhost:8080/description
+
+[#{constraints => [],
+   handler => cowboy_static,
+   metadata => #{get => #{desc => "Static Data"}},
+   options => {priv_dir,example,[],[{mimetypes,cow_mimetypes,all}]},
+   path_match => <<"/[...]">>},
+ #{constraints => [],
+   handler => example_echo_handler,
+   metadata => #{get => #{desc => "Gets echo var in the server"},
+     put => #{desc => "Sets echo var in the server"}},
+   options => [],
+   path_match => <<"/message/[:echo]">>},
+ #{constraints => [],
+   handler => example_description_handler,
+   metadata => #{get => #{desc => "Retrives trails's server description"}},
+   options => [],
+   path_match => <<"/description">>}]
 ```

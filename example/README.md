@@ -21,7 +21,7 @@ http://localhost:8080/index.html
 ```
 
 Eco example
-You can set a response on the server with PUT
+You can set a response on the server with PUT http://localhost:8080/message/echo
 ```
 curl -v -H "Content-Type: text/plain" -X PUT http://localhost:8080/message/yahooooo!!!
 HTTP/1.1 200 OK

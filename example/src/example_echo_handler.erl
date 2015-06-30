@@ -26,12 +26,12 @@ allowed_methods(Req, State) ->
 %% internal
 handle_get(Req, State) ->
   Eco = application:get_env(example, echo, ""),
-  Body = [<<"You Get a eco! ">> , Eco ],
+  Body = [<<"You Get a echo! ">> , Eco ],
   {Body, Req, State}.
 
 handle_put(Req, State) ->
   {Eco, Req1} = cowboy_req:binding(echo, Req, ""),
   application:set_env(example, echo, Eco),
-  Body = [<<"You put a eco! ">> , Eco ],
+  Body = [<<"You put a echo! ">> , Eco ],
   Req2 = cowboy_req:set_resp_body(Body, Req1),
   {true, Req2, State}.

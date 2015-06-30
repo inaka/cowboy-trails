@@ -36,8 +36,8 @@ start_listeners() ->
                 , example_description_handler
                 , []
                 ,  #{get => #{}}),
-  MessageTrail = trails:trail(<<"/message/[:eco]">>
-                        , example_eco_handler
+  MessageTrail = trails:trail(<<"/message/[:echo]">>
+                        , example_echo_handler
                         , []
                         ,  #{get => #{}, put => #{}}),
   StaticTrail = trails:trail(<<"/[...]">>

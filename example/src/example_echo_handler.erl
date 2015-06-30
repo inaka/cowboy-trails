@@ -15,7 +15,7 @@
 -export(
   [
    allowed_methods/2,
-   handle_post/2,
+   handle_put/2,
    handle_get/2
   ]).
 
@@ -25,14 +25,13 @@ allowed_methods(Req, State) ->
 
 %% internal
 handle_get(Req, State) ->
-  lager:info("Got request"),
-  {Eco, Req1} = cowboy_req:binding(eco, Req),
-  Body = [<<"Got a eco! ">> , Eco ],
-  {Body, Req1, State}.
+  Eco = application:get_env(example, echo, ""),
+  Body = [<<"You Get a eco! ">> , Eco ],
+  {Body, Req, State}.
 
-handle_post(Req, State) ->
-  lager:info("Got request"),
-  {Eco, Req1} = cowboy_req:binding(eco, Req),
-  Body = [<<"Got a eco! ">> , Eco ],
+handle_put(Req, State) ->
+  {Eco, Req1} = cowboy_req:binding(echo, Req, ""),
+  application:set_env(example, echo, Eco),
+  Body = [<<"You put a eco! ">> , Eco ],
   Req2 = cowboy_req:set_resp_body(Body, Req1),
   {true, Req2, State}.

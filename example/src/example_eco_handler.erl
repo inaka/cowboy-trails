@@ -1,4 +1,4 @@
--module(example_eco_handler).
+-module(example_echo_handler).
 
 -include_lib("mixer/include/mixer.hrl").
 -mixin([
@@ -21,7 +21,7 @@
 
 %% cowboy
 allowed_methods(Req, State) ->
-    {[<<"GET">>, <<"POST">>], Req, State}.
+    {[<<"GET">>, <<"PUT">>], Req, State}.
 
 %% internal
 handle_get(Req, State) ->

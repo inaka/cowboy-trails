@@ -33,7 +33,7 @@ curl -v -H "Content-Type: text/plain" -X PUT http://localhost:8080/message/yahoo
 < content-type: text/plain
 <
 * Connection #0 to host localhost left intact
-You put a echo! yahooooo!⏎
+You put an echo! yahooooo!⏎
 ```
 
 Description example

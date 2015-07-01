@@ -9,8 +9,7 @@
 %% application
 %% @doc Starts the application
 start() ->
- % {ok, _Started}
-  Resp = application:ensure_all_started(example).
+  application:ensure_all_started(example).
 
 %% @doc Stops the application
 stop() ->
@@ -19,8 +18,7 @@ stop() ->
 %% behaviour
 %% @private
 start(_StartType, _StartArgs) ->
-  {ok, Pid} = example_sup:start_link(),
-  {ok, Pid}.
+  example_sup:start_link().
 
 %% @private
 stop(_State) ->
@@ -32,10 +30,10 @@ start_phase(start_trails_http, _StartType, []) ->
   {ok, Port} = application:get_env(example, http_port),
   {ok, ListenerCount} = application:get_env(example, http_listener_count),
   DescriptionTrail =
-  trails:trail(<<"/description">>
-              , example_description_handler
-              , []
-               , #{get => #{desc => "Retrives trails's server description"}}),
+    trails:trail(<<"/description">>
+                , example_description_handler
+                , []
+                , #{get => #{desc => "Retrives trails's server description"}}),
 
   StaticTrail =
     trails:trail(<<"/[...]">>

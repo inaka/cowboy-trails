@@ -19,21 +19,13 @@ rest_init(Req, _Opts) ->
   {ok, Req, #{}}.
 
 content_types_accepted(Req, State) ->
-  {Method, Req1} = cowboy_req:method(Req),
-  HandleMethod = case Method of
-                     <<"PUT">> -> handle_put
-                     %% Add here another handlers methods
-                 end,
-  {[{<<"text/plain">>, HandleMethod}], Req1, State}.
+  {[{<<"text/plain">>, handle_put}], Req, State}.
 
 content_types_provided(Req, State) ->
-  { [{<<"text/plain">>, handle_get}]
-  , Req
-  , State}.
+  {[{<<"text/plain">>, handle_get}], Req, State}.
 
 forbidden(Req, State) ->
   {false, Req, State}.
 
 resource_exists(Req, State) ->
-  {Method, Req1} = cowboy_req:method(Req),
-  {Method =/= <<"POST">>, Req1, State}.
+  {true, Req, State}.

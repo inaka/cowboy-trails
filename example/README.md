@@ -20,7 +20,7 @@ If you put this url in your browser, you will see a beatiful picture :).
 http://localhost:8080/index.html
 ```
 
-Eco example
+Echo example
 You can set a response on the server with PUT http://localhost:8080/message/echo
 ```
 curl -v -H "Content-Type: text/plain" -X PUT http://localhost:8080/message/yahooooo!!!

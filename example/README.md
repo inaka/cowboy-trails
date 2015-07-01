@@ -28,9 +28,9 @@ curl -v -H "Content-Type: text/plain" -X PUT http://localhost:8080/message/yahoo
 < connection: keep-alive
 * Server Cowboy is not blacklisted
 < server: Cowboy
-< date: Tue, 30 Jun 2015 21:12:06 GMT
+< date: Wed, 01 Jul 2015 18:27:22 GMT
 < content-length: 25
-< content-type: application/text/plain
+< content-type: text/plain
 <
 * Connection #0 to host localhost left intact
 You put a echo! yahooooo!⏎

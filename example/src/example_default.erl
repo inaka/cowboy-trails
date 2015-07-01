@@ -21,15 +21,15 @@ rest_init(Req, _Opts) ->
 content_types_accepted(Req, State) ->
   {Method, Req1} = cowboy_req:method(Req),
   HandleMethod = case Method of
-                     <<"PUT">> ->
-                         handle_put;
-                     <<"POST">> ->
-                         handle_post
+                     <<"PUT">> -> handle_put
+                     %% Add here another handlers methods
                  end,
   {[{<<"text/plain">>, HandleMethod}], Req1, State}.
 
 content_types_provided(Req, State) ->
-  {[{{<<"application">>, <<"text/plain">>, []}, handle_get}], Req, State}.
+  { [{<<"text/plain">>, handle_get}]
+  , Req
+  , State}.
 
 forbidden(Req, State) ->
   {false, Req, State}.

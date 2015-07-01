@@ -4,11 +4,13 @@
 -export([start/2]).
 -export([stop/0]).
 -export([stop/1]).
+-export([start_phase/3]).
 
 %% application
 %% @doc Starts the application
 start() ->
-  {ok, _Started} = application:ensure_all_started(example).
+ % {ok, _Started}
+  Resp = application:ensure_all_started(example).
 
 %% @doc Stops the application
 stop() ->
@@ -18,27 +20,23 @@ stop() ->
 %% @private
 start(_StartType, _StartArgs) ->
   {ok, Pid} = example_sup:start_link(),
-  {ok, _Pid} = start_listeners(),
   {ok, Pid}.
 
 %% @private
 stop(_State) ->
   ok = cowboy:stop_listener(example_http).
 
-start_listeners() ->
+% start_listeners() ->
+-spec start_phase(atom(), application:start_type(), []) -> ok | {error, term()}.
+start_phase(start_trails_http, _StartType, []) ->
   {ok, Port} = application:get_env(example, http_port),
   {ok, ListenerCount} = application:get_env(example, http_listener_count),
   DescriptionTrail =
-    trails:trail(<<"/description">>
-                , example_description_handler
-                , []
-                , #{get => #{desc => "Retrives trails's server description"}}),
-  MessageTrail =
-  trails:trail(<<"/message/[:echo]">>
-              , example_echo_handler
+  trails:trail(<<"/description">>
+              , example_description_handler
               , []
-              ,  #{ get => #{desc => "Gets echo var in the server"}
-                  , put => #{desc => "Sets echo var in the server"}}),
+               , #{get => #{desc => "Retrives trails's server description"}}),
+
   StaticTrail =
     trails:trail(<<"/[...]">>
                 , cowboy_static
@@ -47,11 +45,11 @@ start_listeners() ->
                   , ""
                   , [{mimetypes, cow_mimetypes, all}]}
                 ,  #{get => #{desc => "Static Data"}}),
-  Trails = [DescriptionTrail, MessageTrail, StaticTrail],
+  Trails =
+     trails:trails(example_echo_handler) ++ [ DescriptionTrail, StaticTrail],
   trails:store(Trails),
   Dispatch = trails:single_host_compile(Trails),
-
-  RanchOptions = [{port, Port}  ],
+  RanchOptions = [{port, Port}],
   CowboyOptions =
       [
        {env,
@@ -61,4 +59,5 @@ start_listeners() ->
        {compress, true},
        {timeout, 12000}
       ],
-  cowboy:start_http(example_http, ListenerCount, RanchOptions, CowboyOptions).
+  {ok, _} = cowboy:start_http(example_http, ListenerCount, RanchOptions, CowboyOptions),
+  ok.

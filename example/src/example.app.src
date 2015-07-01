@@ -1,7 +1,7 @@
 {application, example,
  [
   {description,
-   "Cowboys Trails Basic Example."},
+   "Cowboy Trails Basic Example."},
   {vsn, "0.1"},
   {applications,
     [kernel,
@@ -9,6 +9,7 @@
      cowboy
     ]},
   {modules, []},
-  {mod, {example, []}}
+  {mod, {example, []}},
+  {start_phases, [ {start_trails_http, []} ]}
  ]
 }.

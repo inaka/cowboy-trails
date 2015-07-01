@@ -19,9 +19,25 @@
    handle_get/2
   ]).
 
+%trails
+-behaviour(trails_handler).
+-export([trails/0]).
+
+trails() ->
+  MsgTrailsMetadata =
+   #{ get => #{ desc => "Gets echo var from the server"
+              , 'content-type' => "text/plain"}
+    , put => #{desc => "Sets echo var in the server"
+              , 'content-type' => "text/plain"}
+    },
+  [
+   trails:trail("/message/[:echo]", example_echo_handler, [], MsgTrailsMetadata)
+  ].
+
 %% cowboy
 allowed_methods(Req, State) ->
-  {[<<"GET">>, <<"PUT">>], Req, State}.
+  io:format("allowed_methods() -> Req ~p ~n", [Req]),
+  {[<<"GET">>, <<"PUT">>,<<"HEAD">>], Req, State}.
 
 %% internal
 handle_get(Req, State) ->

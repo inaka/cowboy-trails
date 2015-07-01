@@ -1,9 +1,8 @@
 PROJECT = example
 
-DEPS = cowboy mixer cowboy_trails
+DEPS = cowboy_trails mixer
 
-dep_cowboy = git https://github.com/ninenines/cowboy  1.0.1
-dep_mixer = git https://github.com/opscode/mixer.git 0.1.3
+dep_mixer   = git https://github.com/inaka/mixer.git  0.1.3
 dep_cowboy_trails = git https://github.com/inaka/cowboy-trails 75bf34ba
 
 include erlang.mk

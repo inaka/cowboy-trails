@@ -59,5 +59,6 @@ start_phase(start_trails_http, _StartType, []) ->
        {compress, true},
        {timeout, 12000}
       ],
-  {ok, _} = cowboy:start_http(example_http, ListenerCount, RanchOptions, CowboyOptions),
+  {ok, _} =
+    cowboy:start_http(example_http, ListenerCount, RanchOptions, CowboyOptions),
   ok.

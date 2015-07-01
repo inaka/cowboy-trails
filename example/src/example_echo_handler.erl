@@ -37,7 +37,7 @@ trails() ->
 %% cowboy
 allowed_methods(Req, State) ->
   io:format("allowed_methods() -> Req ~p ~n", [Req]),
-  {[<<"GET">>, <<"PUT">>,<<"HEAD">>], Req, State}.
+  {[<<"GET">>, <<"PUT">>, <<"HEAD">>], Req, State}.
 
 %% internal
 handle_get(Req, State) ->

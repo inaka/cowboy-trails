@@ -44,7 +44,7 @@ start_phase(start_trails_http, _StartType, []) ->
                   , example
                   , ""
                   , [{mimetypes, cow_mimetypes, all}]}
-                ,  #{get => #{desc => "Static Data"}}),
+                ,  #{get => #{desc => "Static Files"}}),
   Trails =
      trails:trails(example_echo_handler) ++ [ DescriptionTrail, StaticTrail],
   trails:store(Trails),

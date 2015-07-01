@@ -1,0 +1,15 @@
+{application, example,
+ [
+  {description,
+   "Cowboy Trails Basic Example."},
+  {vsn, "0.1"},
+  {applications,
+    [kernel,
+     stdlib,
+     cowboy
+    ]},
+  {modules, []},
+  {mod, {example, []}},
+  {start_phases, [ {start_trails_http, []} ]}
+ ]
+}.

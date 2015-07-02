@@ -268,6 +268,8 @@ basic_trails_routes(_Config) ->
 -spec trails_store(config()) -> {atom(), string()}.
 trails_store(_Config) ->
   Trails = [
+    {"/resource/[:id]", trails_test2_handler, []},
+    {"/api/:id/resource", [], trails_test2_handler, [arg0]},
     trails:trail("/assets/[...]", cowboy_static, {dir, "www/assets"}),
     trails:trail("/such/path", http_basic_route, [], #{}),
     trails:trail("/very", http_very, [], #{}),
@@ -276,10 +278,13 @@ trails_store(_Config) ->
   {not_started, trails} = (catch trails:all()),
   {not_started, trails} = (catch trails:retrieve("/")),
   ok = trails:store(Trails),
-  4 = length(trails:all()),
+  Length = length(Trails),
+  Length = length(trails:all()),
   #{path_match := "/assets/[...]"} = trails:retrieve("/assets/[...]"),
   #{path_match := "/such/path"} = trails:retrieve("/such/path"),
   #{path_match := "/very"} = trails:retrieve("/very"),
   #{path_match := "/"} = trails:retrieve("/"),
+  #{path_match := "/resource/[:id]"} = trails:retrieve("/resource/[:id]"),
+  #{path_match := "/api/:id/resource"} = trails:retrieve("/api/:id/resource"),
   notfound = trails:retrieve("/other"),
   {comment, ""}.

@@ -125,7 +125,8 @@ trails(Handler) ->
 -spec store([trail()]) -> ok.
 store(Trails) ->
   application:ensure_all_started(trails),
-  store1(Trails).
+  NormalizedPaths = normalize_store_input(Trails),
+  store1(NormalizedPaths).
 
 -spec all() -> [trail()].
 all() ->
@@ -170,3 +171,16 @@ all([], Acc) ->
   Acc;
 all([[_, Trail] | T], Acc) ->
   all(T, [Trail | Acc]).
+
+%% @private
+-spec normalize_store_input([route_path()]) -> trails().
+normalize_store_input(RoutesPaths) ->
+  [normalize(Path) || Path <- RoutesPaths].
+
+%% @private
+-spec normalize(route_path() | trail()) -> trail().
+normalize({PathMatch, ModuleHandler, Options}) ->
+  trail(PathMatch, ModuleHandler, Options);
+normalize({PathMatch, Constraints, ModuleHandler, Options}) ->
+  trail(PathMatch, ModuleHandler, Options, #{}, Constraints);
+normalize(Trail) when is_map(Trail) -> Trail.

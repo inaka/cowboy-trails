@@ -179,10 +179,8 @@ normalize_store_input(RoutesPaths) ->
 
 %% @private
 -spec normalize(route_path() | trail()) -> trail().
-normalize(Trail) when is_map(Trail) -> Trail
-  ;
 normalize({PathMatch, ModuleHandler, Options}) ->
-  trail(PathMatch, ModuleHandler, Options)
-  ;
+  trail(PathMatch, ModuleHandler, Options);
 normalize({PathMatch, Constraints, ModuleHandler, Options}) ->
-  trail(PathMatch, ModuleHandler, Options, #{}, Constraints).
+  trail(PathMatch, ModuleHandler, Options, #{}, Constraints);
+normalize(Trail) when is_map(Trail) -> Trail.

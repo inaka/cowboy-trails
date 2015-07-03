@@ -3,7 +3,7 @@
 <img src="https://lh5.googleusercontent.com/-Y1n1Vh4FjLE/TXDZiQ_zSVI/AAAAAAAAAJY/h47az_0MxO0/s1600/Western+backdrop+04.png" height="200" width="100%" />
 
 # cowboy-trails
-A couple of improvements over Cowboy Routes
+Cowboy routes on steroids!
 
 ## Contact Us
 For **questions** or **general comments** regarding the use of this library,
@@ -24,10 +24,43 @@ And you can check all of our open-source projects at [inaka.github.io](http://in
 * Define the server routes directly within the module that implements them.
 
 ## How to Use it?
-Make sure it's in your code path.
+The first use case for `cowboy_trails` is to compile `cowboy` routes.
 
-First let's add additional information (metadata) to cowboy routes related with
-the semantics of each HTTP method.
+Normally with `cowboy` you compile routes in this way:
+
+```erlang
+Routes = [{'_',
+           [ {"/resource1", resource1_handler, []}
+           , {"/resource2/[:id]", resource2_handler, []}
+           ]
+          }
+         ],
+cowboy_router:compile(Routes),
+```
+
+Trails is also fully compatible with `cowboy` routes, so you can pass the same
+routes in order to be processed by trails:
+
+```erlang
+trails:compile(Routes),
+```
+
+So far seems like there is not any difference right? But the most common case
+with `cowboy` is that you usually work with a single host, even though you're
+force to keep defining the host parameter within the routes (`[{'_', [...]}]`).
+
+Well, with trails you have another useful function to compile single host routes:
+
+```erlang
+%% You only define the routes/paths
+Routes = [ {"/resource1", resource1_handler, []}
+         , {"/resource2/[:id]", resource2_handler, []}
+         ],
+trails:single_host_compile(Routes),
+```
+
+Now, let's suppose that you want to add additional information (metadata) to
+cowboy routes related with the semantics of each HTTP method.
 
 ```erlang
 Metadata = #{put => #{description => "PUT method"},
@@ -97,3 +130,7 @@ trails:single_host_compile(Trails),
 
 In this way each handler keeps their own routes, as it's supposed it should be,
 and then you can merge them easily.
+
+## Example
+For more information about `cowboy_trails`, how to use it and the different
+functions that it exposes, please check this [Example](./example).

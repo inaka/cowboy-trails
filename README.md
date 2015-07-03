@@ -47,7 +47,7 @@ trails:compile(Routes),
 
 So far seems like there is not any difference right? But the most common case
 with `cowboy` is that you usually work with a single host, even though you're
-force to keep defining the host parameter within the routes (`[{'_', [...]}]`).
+required to keep defining the host parameter within the routes (`[{'_', [...]}]`).
 
 Well, with trails you have another useful function to compile single host routes:
 

@@ -125,13 +125,18 @@ trails(Handler) ->
 -spec store([trail()]) -> ok.
 store(Trails) ->
   application:ensure_all_started(trails),
-  store1(Trails).
+  NormalizedPaths = normalize_store_input(Trails),
+  store1(NormalizedPaths).
 
 -spec all() -> [trail()].
 all() ->
   case application:get_application(trails) of
     {ok, trails} ->
-      all(ets:select(trails, [{{'$1', '$2'}, [], ['$$']}]), []);
+      Trails = all(ets:select(trails, [{{'$1', '$2'}, [], ['$$']}]), []),
+      SortIdFun =
+        fun(A, B) -> maps:get(trails_id, A) < maps:get(trails_id, B) end,
+      SortedStoredTrails = lists:sort(SortIdFun, Trails),
+      lists:map(fun remove_id/1, SortedStoredTrails);
     _ ->
       throw({not_started, trails})
   end.
@@ -141,12 +146,14 @@ retrieve(Path) ->
   case application:get_application(trails) of
     {ok, trails} ->
       case ets:lookup(trails, Path) of
-        [{_, Val}] -> Val;
+        [{_, Val}] -> remove_id(Val);
         []         -> notfound
       end;
     _ ->
       throw({not_started, trails})
   end.
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Private API.
@@ -170,3 +177,31 @@ all([], Acc) ->
   Acc;
 all([[_, Trail] | T], Acc) ->
   all(T, [Trail | Acc]).
+
+%% @private
+-spec normalize_store_input([route_path()]) -> trails().
+normalize_store_input(RoutesPaths) ->
+  normalize_id(normalize_paths(RoutesPaths)).
+
+-spec normalize_id([route_path()]) -> trails().
+normalize_id(Trails) ->
+  Length = length(Trails),
+  AddIdFun = fun(Trail, Id) -> Trail#{ trails_id => Id} end,
+  lists:zipwith(AddIdFun, Trails, lists:seq(1, Length)).
+
+%% @private
+-spec normalize_paths([route_path()]) -> trails().
+normalize_paths(RoutesPaths) ->
+  [normalize_path(Path) || Path <- RoutesPaths].
+
+%% @private
+-spec remove_id(trail()) -> trail().
+remove_id(Trail) -> maps:remove(trails_id, Trail).
+
+%% @private
+-spec normalize_path(route_path() | trail()) -> trail().
+normalize_path({PathMatch, ModuleHandler, Options}) ->
+  trail(PathMatch, ModuleHandler, Options);
+normalize_path({PathMatch, Constraints, ModuleHandler, Options}) ->
+  trail(PathMatch, ModuleHandler, Options, #{}, Constraints);
+normalize_path(Trail) when is_map(Trail) -> Trail.

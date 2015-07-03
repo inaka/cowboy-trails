@@ -136,7 +136,7 @@ all() ->
       SortIdFun =
         fun(A, B) -> maps:get(trails_id, A) < maps:get(trails_id, B) end,
       SortedStoredTrails = lists:sort(SortIdFun, Trails),
-     lists:map(fun remove_id/1, SortedStoredTrails);
+      lists:map(fun remove_id/1, SortedStoredTrails);
     _ ->
       throw({not_started, trails})
   end.

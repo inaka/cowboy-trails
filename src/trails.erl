@@ -94,8 +94,8 @@ trail(PathMatch, ModuleHandler, Options) ->
 trail(PathMatch, ModuleHandler, Options, MetaData) ->
   trail(PathMatch, ModuleHandler, Options, MetaData, []).
 
-%% @doc This function enables to add additional information to the
-%%      `cowboy` hanlder, such as: resource path, handler module,
+%% @doc This function allows you to add additional information to the
+%%      `cowboy` handler, such as: resource path, handler module,
 %%      options and metadata. Normally used to document handlers.
 -spec trail(route_match()
            , module()
@@ -110,51 +110,50 @@ trail(PathMatch, ModuleHandler, Options, MetaData, Constraints) ->
    , constraints => Constraints
    }.
 
-%% @doc Gets the `path_match` from the given `trail` map.
+%% @doc Gets the `path_match` from the given `trail`.
 -spec path_match(map()) -> string() | binary().
 path_match(Trail) ->
  maps:get(path_match, Trail, []).
 
-%% @doc Gets the `handler` from the given `trail` map.
+%% @doc Gets the `handler` from the given `trail`.
 -spec handler(map()) -> module().
 handler(Trail) ->
  maps:get(handler, Trail, []).
 
-%% @doc Gets the `options` from the given `trail` map.
+%% @doc Gets the `options` from the given `trail`.
  -spec options(map()) -> list().
 options(Trail) ->
  maps:get(options, Trail, []).
 
-%% @doc Gets the `metadata` from the given `trail` map.
+%% @doc Gets the `metadata` from the given `trail`.
  -spec metadata(map()) -> map().
 metadata(Trail) ->
  maps:get(metadata, Trail, []).
 
-%% @doc Gets the `constraints` from the given `trail` map.
+%% @doc Gets the `constraints` from the given `trail`.
  -spec constraints(map()) -> list().
 constraints(Trail) ->
  maps:get(constraints, Trail, []).
 
-%% @doc This function enables to define the routes on each resource handler,
-%%      instead of define them all in one place (as usually with `cowboy`).
-%%      Your handler must implement the callback `trails/0` and return the
-%%      specific routes for that handler. That callback is invoked for each
-%%      given module and then concatenates the results.
+%% @doc This function allows you to define the routes on each resource handler,
+%%      instead of defining them all in one place (as you're required to do
+%%      with `cowboy`). Your handler must implement the callback `trails/0`
+%%      and return the specific routes for that handler. That callback is
+%%      invoked for each given module and then the results are concatenated.
 -spec trails(module() | [module()]) -> cowboy_router:routes().
 trails(Handlers) when is_list(Handlers) ->
   trails(Handlers, []);
 trails(Handler) ->
   trails([Handler], []).
 
-%% @doc Store the given list of trails in order that they can be retrieved
-%%      by any other handler/process.
+%% @doc Store the given list of trails.
 -spec store([trail()]) -> ok.
 store(Trails) ->
   application:ensure_all_started(trails),
   NormalizedPaths = normalize_store_input(Trails),
   store1(NormalizedPaths).
 
-%% @doc Retrieves all stored set of trails.
+%% @doc Retrieves all stored trails.
 -spec all() -> [trail()].
 all() ->
   case application:get_application(trails) of
@@ -168,7 +167,7 @@ all() ->
       throw({not_started, trails})
   end.
 
-%% @doc Fetch the trail that match with the given path.
+%% @doc Fetch the trail that matches with the given path.
 -spec retrieve(route_match()) -> trail().
 retrieve(Path) ->
   case application:get_application(trails) of

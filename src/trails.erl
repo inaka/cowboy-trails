@@ -1,3 +1,5 @@
+%%% @doc Trails main interface.
+%%%      Use the functions provided in this module to inteact with `trails'.
 -module(trails).
 
 -export([single_host_compile/1]).

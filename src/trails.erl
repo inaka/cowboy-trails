@@ -14,7 +14,7 @@
 -export([constraints/1]).
 -export([store/1, all/0, retrieve/1]).
 
-
+%% Trail specification
 -opaque trail() ::
   #{ path_match  => cowboy_router:route_match()
    , constraints => cowboy_router:constraints()
@@ -44,11 +44,18 @@
 -type metadata() :: #{method() => map()}.
 -export_type([metadata/0]).
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% API
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% @equiv compile([{'_', Trails}]).
 -spec single_host_compile([route_path()]) ->
   cowboy_router:dispatch_rules().
 single_host_compile(Trails) ->
   compile([{'_', Trails}]).
 
+%% @doc Compiles the given list of trails routes, also compatible with
+%%      `cowboy` routes.
 -spec compile([{Host::route_match(), Trails::trails()}]) ->
   cowboy_router:dispatch_rules().
 compile([]) -> [];
@@ -56,33 +63,40 @@ compile(Routes) ->
   cowboy_router:compile(
     [{Host, to_route_paths(Trails)} || {Host, Trails} <- Routes]).
 
+%% @doc Translates the given trails paths into `cowboy` routes.
 -spec to_route_paths([trail()]) -> cowboy_router:routes().
 to_route_paths(Paths) ->
-  [to_route_path(Path)|| Path <- Paths].
+  [to_route_path(Path) || Path <- Paths].
 
+%% @doc Translates a trail path into a route rule.
 -spec to_route_path(trail()) -> route_rule().
 to_route_path(Trail) when is_map(Trail) ->
   PathMatch = maps:get(path_match, Trail),
   ModuleHandler = maps:get(handler, Trail),
   Options = maps:get(options, Trail, []),
   Constraints = maps:get(constraints, Trail, []),
-  {PathMatch, Constraints, ModuleHandler, Options}
-  ;
+  {PathMatch, Constraints, ModuleHandler, Options};
 to_route_path(Trail) when is_tuple(Trail) ->
   Trail.
 
+%% @equiv trail(PathMatch, ModuleHandler, [], #{}, []).
 -spec trail(route_match(), module()) -> trail().
 trail(PathMatch, ModuleHandler) ->
   trail(PathMatch, ModuleHandler, [], #{}, []).
 
+%% @equiv trail(PathMatch, ModuleHandler, Options, #{}, []).
 -spec trail(route_match(), module(), any()) -> trail().
 trail(PathMatch, ModuleHandler, Options) ->
   trail(PathMatch, ModuleHandler, Options, #{}, []).
 
+%% @equiv trail(PathMatch, ModuleHandler, Options, MetaData, []).
 -spec trail(route_match(), module(), any(), map()) -> trail().
 trail(PathMatch, ModuleHandler, Options, MetaData) ->
   trail(PathMatch, ModuleHandler, Options, MetaData, []).
 
+%% @doc This function allows you to add additional information to the
+%%      `cowboy` handler, such as: resource path, handler module,
+%%      options and metadata. Normally used to document handlers.
 -spec trail(route_match()
            , module()
            , any()
@@ -96,38 +110,50 @@ trail(PathMatch, ModuleHandler, Options, MetaData, Constraints) ->
    , constraints => Constraints
    }.
 
+%% @doc Gets the `path_match` from the given `trail`.
 -spec path_match(map()) -> string() | binary().
 path_match(Trail) ->
  maps:get(path_match, Trail, []).
 
+%% @doc Gets the `handler` from the given `trail`.
 -spec handler(map()) -> module().
 handler(Trail) ->
  maps:get(handler, Trail, []).
 
+%% @doc Gets the `options` from the given `trail`.
  -spec options(map()) -> list().
 options(Trail) ->
  maps:get(options, Trail, []).
 
+%% @doc Gets the `metadata` from the given `trail`.
  -spec metadata(map()) -> map().
 metadata(Trail) ->
  maps:get(metadata, Trail, []).
 
+%% @doc Gets the `constraints` from the given `trail`.
  -spec constraints(map()) -> list().
 constraints(Trail) ->
  maps:get(constraints, Trail, []).
 
+%% @doc This function allows you to define the routes on each resource handler,
+%%      instead of defining them all in one place (as you're required to do
+%%      with `cowboy`). Your handler must implement the callback `trails/0`
+%%      and return the specific routes for that handler. That callback is
+%%      invoked for each given module and then the results are concatenated.
 -spec trails(module() | [module()]) -> cowboy_router:routes().
 trails(Handlers) when is_list(Handlers) ->
   trails(Handlers, []);
 trails(Handler) ->
   trails([Handler], []).
 
+%% @doc Store the given list of trails.
 -spec store([trail()]) -> ok.
 store(Trails) ->
   application:ensure_all_started(trails),
   NormalizedPaths = normalize_store_input(Trails),
   store1(NormalizedPaths).
 
+%% @doc Retrieves all stored trails.
 -spec all() -> [trail()].
 all() ->
   case application:get_application(trails) of
@@ -141,6 +167,7 @@ all() ->
       throw({not_started, trails})
   end.
 
+%% @doc Fetch the trail that matches with the given path.
 -spec retrieve(route_match()) -> trail().
 retrieve(Path) ->
   case application:get_application(trails) of
@@ -152,8 +179,6 @@ retrieve(Path) ->
     _ ->
       throw({not_started, trails})
   end.
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Private API.

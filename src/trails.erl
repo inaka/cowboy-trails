@@ -22,7 +22,7 @@
    , constraints => cowboy_router:constraints()
    , handler     => module()
    , options     => any()
-   , metadata    => metadata()
+   , metadata    => metadata(any())
    }.
 -export_type([trail/0]).
 
@@ -43,8 +43,8 @@
 -type method() :: get | put | post | delete | patch | head | options.
 -export_type([method/0]).
 
--type metadata() :: #{method() => map()}.
--export_type([metadata/0]).
+-type metadata(X) :: #{method() => X}.
+-export_type([metadata/1]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% API

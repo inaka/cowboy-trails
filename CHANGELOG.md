@@ -1,5 +1,19 @@
 # Change Log
 
+## [0.0.2](https://github.com/inaka/cowboy-trails/tree/0.0.2) (2015-08-06)
+
+[Full Changelog](https://github.com/inaka/cowboy-trails/compare/0.0.1...0.0.2)
+
+**Closed issues:**
+
+- Fulfil the open-source checklist [\#11](https://github.com/inaka/cowboy-trails/issues/11)
+
+**Merged pull requests:**
+
+- Fixed trails:trails/1 and trails\_handler callback spec. [\#39](https://github.com/inaka/cowboy-trails/pull/39) ([cabol](https://github.com/cabol))
+
+- Fixed metadata type, now is trails:metadata/1. [\#38](https://github.com/inaka/cowboy-trails/pull/38) ([cabol](https://github.com/cabol))
+
 ## [0.0.1](https://github.com/inaka/cowboy-trails/tree/0.0.1) (2015-07-24)
 
 **Fixed bugs:**
@@ -33,6 +47,8 @@
 - Base app structure [\#3](https://github.com/inaka/cowboy-trails/issues/3)
 
 **Merged pull requests:**
+
+- Version Bump. [\#37](https://github.com/inaka/cowboy-trails/pull/37) ([cabol](https://github.com/cabol))
 
 - Added edoc to describe modules. [\#36](https://github.com/inaka/cowboy-trails/pull/36) ([cabol](https://github.com/cabol))
 

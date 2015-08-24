@@ -28,4 +28,11 @@ forbidden(Req, State) ->
   {false, Req, State}.
 
 resource_exists(Req, State) ->
-  {true, Req, State}.
+  case cowboy_req:binding(key, Req) of
+    {undefined, Req1} -> {true, Req1, State};
+    {Key, Req1} ->
+      case application:get_env(example, Key, undefined) of
+        undefined -> {false, Req1, State};
+        _ -> {true, Req1, State}
+      end
+  end.

@@ -45,7 +45,7 @@ handle_get(Req, State) ->
   case application:get_env(example, Key, undefined) of
     undefined ->
       {ok, Req2} = cowboy_req:reply(404, Req1),
-      {stop, Req2, State};
+      {halt, Req2, State};
     Value ->
       {Value, Req1, State}
   end.

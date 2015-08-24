@@ -19,14 +19,14 @@ And you can check all of our open-source projects at [inaka.github.io](http://in
 **Cowboy-Trails** enables you to:
 
 * Add information to `cowboy` routes, which can be used later to interact with
-  the server with a higher abstraction level.
+  the server in a higher abstraction level.
 
 * Define the server routes directly within the module that implements them.
 
 ## How to Use it?
 The first use case for `cowboy_trails` is to compile `cowboy` routes.
 
-Normally with `cowboy` you compile routes in this way:
+Normally with `cowboy` you compile routes in the following way:
 
 ```erlang
 Routes = [{'_',
@@ -45,7 +45,7 @@ routes in order to be processed by trails:
 trails:compile(Routes),
 ```
 
-So far seems like there is not any difference right? But the most common case
+So far it seems like there is not any difference, right? But the most common case
 with `cowboy` is that you usually work with a single host, even though you're
 required to keep defining the host parameter within the routes (`[{'_', [...]}]`).
 
@@ -77,8 +77,7 @@ Metadata = trails:metadata(Trail),
 
 This can be used later to generate documentation related to each endpoint.
 
-Normally, when you work with `cowboy` you have to define all routes in one place,
-for example like this:
+Normally, when you work with `cowboy` you have to define all routes in one place:
 
 ```erlang
 Routes =
@@ -101,12 +100,12 @@ Routes =
 Dispatch = cowboy_router:compile(Routes),
 ```
 
-But now with `trails` you're able to define the routes on each resource handler,
-and your handler must implement the callback `trails/0` and return the specific
-routes for that handler. To better understanding, in the `test` folder you will
-find some examples, e.g.: [trails_test_handler](./test/trails_test_handler.erl).
+But now with `trails` you're able to define the routes on each resource handler.
+The handler must implement the callback `trails/0` and return the specific
+routes for that handler. For a better understanding, you can check out the
+examples in the `test` folder ([trails_test_handler](./test/trails_test_handler.erl)).
 
-Once you have implemented `trails/0` callback on your handlers, you can do
+Once you have implemented the `trails/0` callback on your handlers, you can do
 something like this:
 
 ```erlang
@@ -128,9 +127,10 @@ Trails =
 trails:single_host_compile(Trails),
 ```
 
-In this way each handler keeps their own routes, as it's supposed it should be,
-and then you can merge them easily.
+This way each handler keeps their own routes, as it should be, and you can
+merge them easily.
 
 ## Example
+
 For more information about `cowboy_trails`, how to use it and the different
 functions that it exposes, please check this [Example](./example).

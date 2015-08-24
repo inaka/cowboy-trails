@@ -43,8 +43,8 @@ start_phase(start_trails_http, _StartType, []) ->
                   , ""
                   , [{mimetypes, cow_mimetypes, all}]}
                 ,  #{get => #{desc => "Static Files"}}),
-  Trails =
-     trails:trails(example_echo_handler) ++ [ DescriptionTrail, StaticTrail],
+  Handlers = [example_echo_handler, example_dumb_kv_handler],
+  Trails = trails:trails(Handlers) ++ [ DescriptionTrail, StaticTrail],
   trails:store(Trails),
   Dispatch = trails:single_host_compile(Trails),
   RanchOptions = [{port, Port}],

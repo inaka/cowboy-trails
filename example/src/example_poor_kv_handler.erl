@@ -1,4 +1,4 @@
--module(example_dumb_kv_handler).
+-module(example_poor_kv_handler).
 
 -include_lib("mixer/include/mixer.hrl").
 -mixin([
@@ -33,7 +33,7 @@ trails() ->
      , delete => #{desc => "Unsets an env var in the server"
                   , 'content-type' => "text/plain"}
      },
-  [trails:trail("/dumb-kv/:key/[:value]", ?MODULE, [], MsgTrailsMetadata)].
+  [trails:trail("/poor-kv/:key/[:value]", ?MODULE, [], MsgTrailsMetadata)].
 
 %% cowboy
 allowed_methods(Req, State) ->

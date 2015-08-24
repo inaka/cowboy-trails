@@ -44,27 +44,27 @@ that uses the application's env variable as its backend. It is possible to `PUT`
 `GET` and `DELETE` values in the following way:
 
 ```
-$ curl -XPUT "localhost:8080/dumb-kv/some-key/some-value" -H "content-type: text/plain"
+$ curl -XPUT "localhost:8080/poor-kv/some-key/some-value" -H "content-type: text/plain"
 
 some-value
 
-$ curl -XGET "localhost:8080/dumb-kv/some-key" -H "content-type: text/plain"
+$ curl -XGET "localhost:8080/poor-kv/some-key" -H "content-type: text/plain"
 
 some-value
 
-$ curl -v -XGET "localhost:8080/dumb-kv/non-existing-key" -H "content-type: text/plain"
+$ curl -v -XGET "localhost:8080/poor-kv/non-existing-key" -H "content-type: text/plain"
 
 ...
 < HTTP/1.1 404 Not Found
 ...
 
-$ curl -v -XDELETE "localhost:8080/dumb-kv/some-key" -H "content-type: text/plain"
+$ curl -v -XDELETE "localhost:8080/poor-kv/some-key" -H "content-type: text/plain"
 
 ...
 < HTTP/1.1 204 No Content
 ...
 
-$ curl -v -XDELETE "localhost:8080/dumb-kv/some-key" -H "content-type: text/plain"
+$ curl -v -XDELETE "localhost:8080/poor-kv/some-key" -H "content-type: text/plain"
 
 ...
 < HTTP/1.1 404 Not Found

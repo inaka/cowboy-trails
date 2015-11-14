@@ -149,7 +149,7 @@ trails(Handler) ->
   trails([Handler], []).
 
 %% @doc Store the given list of trails.
--spec store([trail()]) -> ok.
+-spec store(trails()) -> ok.
 store(Trails) ->
   application:ensure_all_started(trails),
   NormalizedPaths = normalize_store_input(Trails),

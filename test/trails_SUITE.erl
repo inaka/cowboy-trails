@@ -310,7 +310,7 @@ trails_api_root(_Config) ->
   ok = trails:api_root("/api"),
   "/api" = trails:api_root(),
   Routes = [trails:trail("/things", the_handler)],
-  [{'_',[],[{[<<"api">>, <<"things">>],[],the_handler,[]}]}] =
+  [{'_', [], [{[<<"api">>, <<"things">>], [], the_handler, []}]}] =
     trails:single_host_compile(Routes),
   ok.
 

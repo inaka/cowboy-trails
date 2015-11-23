@@ -19,7 +19,4 @@ include erlang.mk
 
 SHELL_OPTS = -s sync
 
-# Commont Test Config
-CT_DEPS = xref_runner cowboy
-
 CT_OPTS = -cover test/trails.coverspec -erl_args

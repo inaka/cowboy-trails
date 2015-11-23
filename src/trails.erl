@@ -15,6 +15,7 @@
 -export([metadata/1]).
 -export([constraints/1]).
 -export([store/1, all/0, retrieve/1]).
+-export([api_root/0, api_root/1]).
 
 %% Trail specification
 -opaque trail() ::
@@ -73,11 +74,12 @@ to_route_paths(Paths) ->
 %% @doc Translates a trail path into a route rule.
 -spec to_route_path(trail()) -> route_rule().
 to_route_path(Trail) when is_map(Trail) ->
+  ApiRoot = api_root(),
   PathMatch = maps:get(path_match, Trail),
   ModuleHandler = maps:get(handler, Trail),
   Options = maps:get(options, Trail, []),
   Constraints = maps:get(constraints, Trail, []),
-  {PathMatch, Constraints, ModuleHandler, Options};
+  {ApiRoot ++ PathMatch, Constraints, ModuleHandler, Options};
 to_route_path(Trail) when is_tuple(Trail) ->
   Trail.
 
@@ -181,6 +183,16 @@ retrieve(Path) ->
     _ ->
       throw({not_started, trails})
   end.
+
+%% @doc Get api_root env param value if any, empty otherwise.
+-spec api_root() -> list().
+api_root() ->
+    application:get_env(trails, api_root, "").
+
+%% @doc Set api_root env param to the given Path.
+-spec api_root(list()) -> ok.
+api_root(Path) ->
+    application:set_env(trails, api_root, Path).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Private API.

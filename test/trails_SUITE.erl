@@ -4,6 +4,8 @@
 -export([all/0]).
 -export([init_per_suite/1]).
 -export([end_per_suite/1]).
+-export([init_per_testcase/2]).
+-export([end_per_testcase/2]).
 -export([basic_compile_test/1]).
 -export([minimal_compile_test/1]).
 -export([static_compile_test/1]).
@@ -20,6 +22,7 @@
 -export([put_metadata/1]).
 -export([post_metadata/1]).
 -export([trails_store/1]).
+-export([trails_api_root/1]).
 
 
 -type config() :: [{atom(), term()}].
@@ -41,6 +44,17 @@ init_per_suite(Config) ->
 -spec end_per_suite(config()) -> config().
 end_per_suite(Config) ->
   Config.
+
+-spec init_per_testcase(atom(), config()) -> config().
+init_per_testcase(_, Config) -> Config.
+
+-spec end_per_testcase(atom(), config()) ->
+  term() | {fail, term()} | {save_config, config()}.
+end_per_testcase(trails_api_root, Config) ->
+  application:set_env(trails, api_root, ""),
+  Config;
+end_per_testcase(_, Config) ->
+    Config.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Test Cases
@@ -290,6 +304,15 @@ trails_store(_Config) ->
   #{path_match := "/api/:id/resource"} = trails:retrieve("/api/:id/resource"),
   notfound = trails:retrieve("/other"),
   {comment, ""}.
+
+-spec trails_api_root(config()) -> ok.
+trails_api_root(_Config) ->
+  ok = trails:api_root("/api"),
+  "/api" = trails:api_root(),
+  Routes = [trails:trail("/things", the_handler)],
+  [{'_',[],[{[<<"api">>, <<"things">>],[],the_handler,[]}]}] =
+    trails:single_host_compile(Routes),
+  ok.
 
 %% @private
 normalize_paths(RoutesPaths) ->

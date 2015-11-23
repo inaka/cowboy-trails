@@ -1,7 +1,7 @@
 PROJECT = trails
 
 DEPS = cowboy cowlib ranch
-TEST_DEPS = xref_runner cowboy
+TEST_DEPS = xref_runner
 SHELL_DEPS = sync
 
 dep_cowboy = git https://github.com/ninenines/cowboy.git 1.0.1

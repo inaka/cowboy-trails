@@ -125,17 +125,17 @@ handler(Trail) ->
  maps:get(handler, Trail, []).
 
 %% @doc Gets the `options' from the given `trail'.
- -spec options(map()) -> list().
+-spec options(map()) -> string().
 options(Trail) ->
  maps:get(options, Trail, []).
 
 %% @doc Gets the `metadata' from the given `trail'.
- -spec metadata(map()) -> map().
+-spec metadata(map()) -> map().
 metadata(Trail) ->
  maps:get(metadata, Trail, []).
 
 %% @doc Gets the `constraints' from the given `trail'.
- -spec constraints(map()) -> list().
+-spec constraints(map()) -> string().
 constraints(Trail) ->
  maps:get(constraints, Trail, []).
 
@@ -185,12 +185,12 @@ retrieve(Path) ->
   end.
 
 %% @doc Get api_root env param value if any, empty otherwise.
--spec api_root() -> list().
+-spec api_root() -> string().
 api_root() ->
     application:get_env(trails, api_root, "").
 
 %% @doc Set api_root env param to the given Path.
--spec api_root(list()) -> ok.
+-spec api_root(string()) -> ok.
 api_root(Path) ->
     application:set_env(trails, api_root, Path).
 

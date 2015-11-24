@@ -11,3 +11,4 @@ rel/example_project
 .rebar
 .erlang.mk*
 elvis
+*.d

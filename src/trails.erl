@@ -52,7 +52,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% @equiv compile([{'_', Trails}])
--spec single_host_compile([route_path()]) ->
+-spec single_host_compile(trails()) ->
   cowboy_router:dispatch_rules().
 single_host_compile(Trails) ->
   compile([{'_', Trails}]).
@@ -115,27 +115,27 @@ trail(PathMatch, ModuleHandler, Options, MetaData, Constraints) ->
    }.
 
 %% @doc Gets the `path_match' from the given `trail'.
--spec path_match(map()) -> string() | binary().
+-spec path_match(trail()) -> cowboy_router:route_match().
 path_match(Trail) ->
  maps:get(path_match, Trail, []).
 
 %% @doc Gets the `handler' from the given `trail'.
--spec handler(map()) -> module().
+-spec handler(trail()) -> module().
 handler(Trail) ->
  maps:get(handler, Trail, []).
 
 %% @doc Gets the `options' from the given `trail'.
--spec options(map()) -> string().
+-spec options(trail()) -> any().
 options(Trail) ->
  maps:get(options, Trail, []).
 
 %% @doc Gets the `metadata' from the given `trail'.
--spec metadata(map()) -> map().
+-spec metadata(trail()) -> map().
 metadata(Trail) ->
- maps:get(metadata, Trail, []).
+ maps:get(metadata, Trail, #{}).
 
 %% @doc Gets the `constraints' from the given `trail'.
--spec constraints(map()) -> string().
+-spec constraints(trail()) -> cowboy_router:constraints().
 constraints(Trail) ->
  maps:get(constraints, Trail, []).
 
@@ -153,7 +153,7 @@ trails(Handler) ->
 %% @doc Store the given list of trails.
 -spec store(trails()) -> ok.
 store(Trails) ->
-  application:ensure_all_started(trails),
+  _ = application:ensure_all_started(trails),
   NormalizedPaths = normalize_store_input(Trails),
   store1(NormalizedPaths).
 
@@ -172,7 +172,7 @@ all() ->
   end.
 
 %% @doc Fetch the trail that matches with the given path.
--spec retrieve(route_match()) -> trail().
+-spec retrieve(route_match()) -> trail() | notfound.
 retrieve(Path) ->
   case application:get_application(trails) of
     {ok, trails} ->
@@ -218,7 +218,7 @@ all([[_, Trail] | T], Acc) ->
   all(T, [Trail | Acc]).
 
 %% @private
--spec normalize_store_input([route_path()]) -> trails().
+-spec normalize_store_input(trails()) -> [trail()].
 normalize_store_input(RoutesPaths) ->
   normalize_id(normalize_paths(RoutesPaths)).
 
@@ -229,7 +229,7 @@ normalize_id(Trails) ->
   lists:zipwith(AddIdFun, Trails, lists:seq(1, Length)).
 
 %% @private
--spec normalize_paths([route_path()]) -> trails().
+-spec normalize_paths(trails()) -> [trail()].
 normalize_paths(RoutesPaths) ->
   [normalize_path(Path) || Path <- RoutesPaths].
 

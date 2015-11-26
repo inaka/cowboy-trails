@@ -14,7 +14,9 @@
 -export([options/1]).
 -export([metadata/1]).
 -export([constraints/1]).
--export([store/1, all/0, retrieve/1]).
+-export([store/1, store/2]).
+-export([all/0, all/1, all/2]).
+-export([retrieve/1, retrieve/2, retrieve/3]).
 -export([api_root/0, api_root/1]).
 
 %% Trail specification
@@ -151,18 +153,58 @@ trails(Handler) ->
   trails([Handler], []).
 
 %% @doc Store the given list of trails.
--spec store(trails()) -> ok.
+-spec store(Trails::trails() |
+              [{HostMatch::route_match(), Trails::trails()}]) -> ok.
 store(Trails) ->
-  _ = application:ensure_all_started(trails),
+  store('_', Trails).
+
+-spec store(Server::ranch:ref(),
+            Trails::trails() |
+              [{HostMatch::route_match(), Trails::trails()}]) -> ok.
+store(_Server, []) ->
+  ok;
+store(Server, [{HostMatch, Trails} | Hosts]) ->
   NormalizedPaths = normalize_store_input(Trails),
-  store1(NormalizedPaths).
+  do_store(Server, HostMatch, NormalizedPaths),
+  store(Server, Hosts);
+store(Server, Trails) ->
+  NormalizedPaths = normalize_store_input(Trails),
+  do_store(Server, '_', NormalizedPaths).
 
 %% @doc Retrieves all stored trails.
 -spec all() -> [trail()].
 all() ->
+  all('_').
+
+%% @doc Retrieves all stored trails for the given `HostMatch`
+-spec all(HostMatch::route_match()) -> [trail()].
+all(HostMatch) ->
+  all('_', HostMatch).
+
+%% @doc Retrieves all stored trails for the given `Server` and `HostMatch`
+-spec all(Server::ranch:ref(), HostMatch::route_match()) -> [trail()].
+all(Server, HostMatch) ->
   case application:get_application(trails) of
     {ok, trails} ->
-      Trails = all(ets:select(trails, [{{'$1', '$2'}, [], ['$$']}]), []),
+      MatchSpec =
+        case {Server, HostMatch} of
+          {'_', HostMatch} ->
+            [{{{'$1', HostMatch, '$2'}, '$3'}, [], ['$$']}];
+          {Server, HostMatch} ->
+            [{{{Server, HostMatch, '$1'}, '$2'}, [], ['$$']}]
+        end,
+      Matches = ets:select(trails, MatchSpec),
+      FoundServers = [Srvr || [Srvr, _PathMatch, _Trail] <- Matches],
+      % Extract unique elements
+      Servers = lists:usort(FoundServers),
+      % There should be no more than one element in this list.
+      % If there is more than one, it means the same trail is defined
+      % in other host(s).
+      case Servers of
+        [_, _ | _] -> throw(multiple_servers);
+        _ -> ok
+      end,
+      Trails = all_trails(Matches, []),
       SortIdFun =
         fun(A, B) -> maps:get(trails_id, A) < maps:get(trails_id, B) end,
       SortedStoredTrails = lists:sort(SortIdFun, Trails),
@@ -172,13 +214,31 @@ all() ->
   end.
 
 %% @doc Fetch the trail that matches with the given path.
--spec retrieve(route_match()) -> trail() | notfound.
-retrieve(Path) ->
+-spec retrieve(PathMatch::string()) -> trail() | notfound.
+retrieve(PathMatch) ->
+  retrieve('_', PathMatch).
+
+%% @doc Fetch the trail that matches with the given host && path.
+-spec retrieve(HostMatch::route_match(),
+               PathMatch::string()) -> trail() | notfound.
+retrieve(HostMatch, PathMatch) ->
+  retrieve('_', HostMatch, PathMatch).
+
+%% @doc Fetch the trail that matches with the given server && host && path.
+-spec retrieve(Server::ranch:ref(),
+               HostMatch::route_match(),
+               PathMatch::string()) -> trail() | notfound.
+retrieve(Server, HostMatch, PathMatch) ->
   case application:get_application(trails) of
     {ok, trails} ->
-      case ets:lookup(trails, Path) of
-        [{_, Val}] -> remove_id(Val);
-        []         -> notfound
+      Key = {Server, HostMatch, PathMatch},
+      case ets:select(trails, [{{Key, '$1'}, [], ['$$']}]) of
+        % No elements found
+        [] -> notfound;
+        % One element found
+        [[Trail = #{path_match := PathMatch}]] -> remove_id(Trail);
+        % More than one element found
+        [_, _ | _] -> throw(multiple_trails)
       end;
     _ ->
       throw({not_started, trails})
@@ -205,17 +265,22 @@ trails([Module | T], Acc) ->
   trails(T, Acc ++ trails_handler:trails(Module)).
 
 %% @private
-store1([]) ->
-  ok;
-store1([Trail = #{path_match := Key} | T]) ->
-  ets:insert(trails, {Key, Trail}),
-  store1(T).
+-spec do_store(Server::ranch:ref(),
+               HostMatch::route_match(),
+               Trails::[route_path()]) -> ok.
+do_store(_Server, _HostMatch, []) -> ok;
+do_store(Server, HostMatch, [Trail = #{path_match := PathMatch} | Trails]) ->
+  {ok, _} = application:ensure_all_started(trails),
+  ets:insert(trails, {{Server, HostMatch, PathMatch}, Trail}),
+  do_store(Server, HostMatch, Trails).
 
 %% @private
-all([], Acc) ->
+all_trails([], Acc) ->
   Acc;
-all([[_, Trail] | T], Acc) ->
-  all(T, [Trail | Acc]).
+all_trails([[_, Trail] | T], Acc) ->
+  all_trails(T, [Trail | Acc]);
+all_trails([[_Server, _PathMatch, Trail] | T], Acc) ->
+  all_trails(T, [Trail | Acc]).
 
 %% @private
 -spec normalize_store_input(trails()) -> [trail()].

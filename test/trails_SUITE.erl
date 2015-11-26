@@ -23,6 +23,8 @@
 -export([post_metadata/1]).
 -export([trails_store/1]).
 -export([trails_api_root/1]).
+-export([minimal_multiple_host_compile_test/1]).
+-export([minimal_multiple_server_test/1]).
 
 -dialyzer([{no_opaque, [trails_api_root/1]}]).
 -dialyzer([{no_return, [trails_api_root/1]}]).
@@ -321,6 +323,60 @@ trails_api_root(_Config) ->
   ok = trails:single_host_compile(Routes),
   {comment, ""}.
 
+
+-spec minimal_multiple_host_compile_test(config()) -> {comment, string()}.
+minimal_multiple_host_compile_test(_Config) ->
+  Trails1 = get_trails1(),
+  [Trail1, _, Repeated1] = Trails1,
+  Trails2 = get_trails2(),
+  % Checks the ability to store same routes for different hosts
+  ok = trails:store([{"host1", Trails1}, {"host2", Trails2}]),
+  Trails1 = trails:all("host1"),
+  Trails2 = trails:all("host2"),
+  % trails:retrieve/1 will throw an exception if the same trail
+  % is defined in more than one host or server.
+  ok = try trails:retrieve("/repeated")
+       catch
+         throw:multiple_trails -> ok
+       end,
+  Trail1 = trails:retrieve("host1", "/path1"),
+  Repeated1 = trails:retrieve("host1", "/repeated"),
+  notfound = trails:retrieve("host2", "/path1"),
+  notfound = trails:retrieve("unknown_host", "/path1"),
+  % Test that trails:do_store/3 actually starts trails application
+  ok = application:stop(trails),
+  ok = trails:store([{"host3", Trails1}, {"host4", Trails2}]),
+  {comment, ""}.
+
+-spec minimal_multiple_server_test(config()) -> {comment, string()}.
+minimal_multiple_server_test(_Config) ->
+  Trails1 = get_trails1(),
+  [Trail1, _, Repeated1] = Trails1,
+  Trails2 = get_trails2(),
+  [_, _, Repeated2] = Trails2,
+  ok = trails:store(server1, [{"host1", Trails1}, {"host2", Trails2}]),
+  ok = trails:store(server2, Trails2),
+  ok = trails:store(server3, [{"host1", Trails1}]),
+  Trails1 = trails:all(server1, "host1"),
+  Trails2 = trails:all(server1, "host2"),
+  Trails2 = trails:all(server2, '_'),
+  ok = try trails:all("host1")
+       catch
+         throw:multiple_servers -> ok
+       end,
+  ok = try trails:retrieve("host1", "/path1")
+       catch
+         throw:multiple_trails -> ok
+       end,
+  Trail1 = trails:retrieve(server1, "host1", "/path1"),
+  Trail1 = trails:retrieve(server3, "host1", "/path1"),
+  Repeated1 = trails:retrieve(server1, "host1", "/repeated"),
+  Repeated2 = trails:retrieve(server2, '_', "/repeated"),
+  notfound = trails:retrieve(server1, "host2", "/path1"),
+  notfound = trails:retrieve(server3, "host2", "/path4"),
+  notfound = trails:retrieve(unknown_server, "unknown_host", "/path1"),
+  {comment, ""}.
+
 %% @private
 normalize_paths(RoutesPaths) ->
   [normalize_path(Path) || Path <- RoutesPaths].
@@ -331,3 +387,21 @@ normalize_path({PathMatch, ModuleHandler, Options}) ->
 normalize_path({PathMatch, Constraints, ModuleHandler, Options}) ->
   trails:trail(PathMatch, ModuleHandler, Options, #{}, Constraints);
 normalize_path(Trail) -> Trail.
+
+%% @private
+-spec get_trails1() -> [trails:trail()].
+get_trails1() ->
+  [
+    trails:trail("/path1", path1_handler),
+    trails:trail("/path2", path2_handler),
+    trails:trail("/repeated", repeated_handler)
+  ].
+
+%% @private
+-spec get_trails2() -> [trails:trail()].
+get_trails2() ->
+  [
+    trails:trail("/path3", path3_handler),
+    trails:trail("/path4", path4_handler),
+    trails:trail("/repeated", repeated_handler)
+  ].

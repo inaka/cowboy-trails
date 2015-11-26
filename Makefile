@@ -1,10 +1,11 @@
 PROJECT = trails
 
-DEPS = cowboy
+DEPS = cowboy ranch
 TEST_DEPS = xref_runner katana mixer elvis meck
 SHELL_DEPS = sync
 
 dep_cowboy = git https://github.com/ninenines/cowboy.git 1.0.4
+dep_ranch = git https://github.com/ninenines/ranch.git 1.2.0
 dep_sync =  git https://github.com/rustyio/sync.git  9c78e7b
 dep_xref_runner = git https://github.com/inaka/xref_runner.git 0.2.2
 dep_mixer = git https://github.com/inaka/mixer.git 0.1.4

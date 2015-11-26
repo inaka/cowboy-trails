@@ -270,7 +270,7 @@ trails([Module | T], Acc) ->
                Trails::[route_path()]) -> ok.
 do_store(_Server, _HostMatch, []) -> ok;
 do_store(Server, HostMatch, [Trail = #{path_match := PathMatch} | Trails]) ->
-  _ = application:ensure_all_started(trails),
+  {ok, _} = application:ensure_all_started(trails),
   ets:insert(trails, {{Server, HostMatch, PathMatch}, Trail}),
   do_store(Server, HostMatch, Trails).
 

@@ -156,7 +156,6 @@ trails(Handler) ->
 -spec store(Trails::trails() |
               [{HostMatch::route_match(), Trails::trails()}]) -> ok.
 store(Trails) ->
-  _ = application:ensure_all_started(trails),
   store('_', Trails).
 
 -spec store(Server::ranch:ref(),
@@ -168,14 +167,14 @@ store(Server, [{HostMatch, Trails} | Hosts]) ->
   NormalizedPaths = normalize_store_input(Trails),
   do_store(Server, HostMatch, NormalizedPaths),
   store(Server, Hosts);
-store(Server, Trails) when is_list(Trails) ->
+store(Server, Trails) ->
   NormalizedPaths = normalize_store_input(Trails),
   do_store(Server, '_', NormalizedPaths).
 
 %% @doc Retrieves all stored trails.
 -spec all() -> [trail()].
 all() ->
-    all('_').
+  all('_').
 
 %% @doc Retrieves all stored trails for the given `HostMatch`
 -spec all(HostMatch::route_match()) -> [trail()].
@@ -195,16 +194,14 @@ all(Server, HostMatch) ->
             [{{{Server, HostMatch, '$1'}, '$2'}, [], ['$$']}]
         end,
       Matches = ets:select(trails, MatchSpec),
-      FoundServers = [Srvr ||
-                      Result = [Srvr, _PathMatch, _Trail] <-
-                      Matches, length(Result) > 2],
+      FoundServers = [Srvr || [Srvr, _PathMatch, _Trail] <- Matches],
       % Extract unique elements
       Servers = lists:usort(FoundServers),
       % There should be no more than one element in this list.
       % If there is more than one, it means the same trail is defined
       % in other host(s).
-      case length(Servers) of
-        Total when Total > 1 -> throw(multiple_servers);
+      case Servers of
+        [_, _ | _] -> throw(multiple_servers);
         _ -> ok
       end,
       Trails = all_trails(Matches, []),
@@ -241,8 +238,7 @@ retrieve(Server, HostMatch, PathMatch) ->
         % One element found
         [[Trail = #{path_match := PathMatch}]] -> remove_id(Trail);
         % More than one element found
-        Trails when length(Trails) > 1 ->
-          throw(multiple_trails)
+        [_, _ | _] -> throw(multiple_trails)
       end;
     _ ->
       throw({not_started, trails})
@@ -274,6 +270,7 @@ trails([Module | T], Acc) ->
                Trails::[route_path()]) -> ok.
 do_store(_Server, _HostMatch, []) -> ok;
 do_store(Server, HostMatch, [Trail = #{path_match := PathMatch} | Trails]) ->
+  _ = application:ensure_all_started(trails),
   ets:insert(trails, {{Server, HostMatch, PathMatch}, Trail}),
   do_store(Server, HostMatch, Trails).
 

@@ -343,6 +343,9 @@ minimal_multiple_host_compile_test(_Config) ->
   Repeated1 = trails:retrieve("host1", "/repeated"),
   notfound = trails:retrieve("host2", "/path1"),
   notfound = trails:retrieve("unknown_host", "/path1"),
+  % Test that trails:do_store/3 actually starts trails application
+  ok = application:stop(trails),
+  ok = trails:store([{"host3", Trails1}, {"host4", Trails2}]),
   {comment, ""}.
 
 -spec minimal_multiple_server_test(config()) -> {comment, string()}.

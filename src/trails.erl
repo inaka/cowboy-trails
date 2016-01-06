@@ -119,27 +119,27 @@ trail(PathMatch, ModuleHandler, Options, MetaData, Constraints) ->
 %% @doc Gets the `path_match' from the given `trail'.
 -spec path_match(trail()) -> cowboy_router:route_match().
 path_match(Trail) ->
- maps:get(path_match, Trail, []).
+  maps:get(path_match, Trail, []).
 
 %% @doc Gets the `handler' from the given `trail'.
 -spec handler(trail()) -> module().
 handler(Trail) ->
- maps:get(handler, Trail, []).
+  maps:get(handler, Trail, []).
 
 %% @doc Gets the `options' from the given `trail'.
 -spec options(trail()) -> any().
 options(Trail) ->
- maps:get(options, Trail, []).
+  maps:get(options, Trail, []).
 
 %% @doc Gets the `metadata' from the given `trail'.
 -spec metadata(trail()) -> map().
 metadata(Trail) ->
- maps:get(metadata, Trail, #{}).
+  maps:get(metadata, Trail, #{}).
 
 %% @doc Gets the `constraints' from the given `trail'.
 -spec constraints(trail()) -> cowboy_router:constraints().
 constraints(Trail) ->
- maps:get(constraints, Trail, []).
+  maps:get(constraints, Trail, []).
 
 %% @doc This function allows you to define the routes on each resource handler,
 %%      instead of defining them all in one place (as you're required to do

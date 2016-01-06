@@ -9,6 +9,7 @@
 
 **Closed issues:**
 
+- Bump version to 0.1.0 [\#49](https://github.com/inaka/cowboy-trails/issues/49)
 - Add Meta Testing [\#46](https://github.com/inaka/cowboy-trails/issues/46)
 - Allow the user to set a global api-root path [\#42](https://github.com/inaka/cowboy-trails/issues/42)
 - Improve Example [\#27](https://github.com/inaka/cowboy-trails/issues/27)
@@ -16,6 +17,7 @@
 
 **Merged pull requests:**
 
+- \[Fix \#49\] Bump version to 0.1.0 [\#51](https://github.com/inaka/cowboy-trails/pull/51) ([harenson](https://github.com/harenson))
 - \[Fix \#19\] Allow more than one server running on the same node [\#50](https://github.com/inaka/cowboy-trails/pull/50) ([harenson](https://github.com/harenson))
 - \[Fix \#46\] Add meta testing [\#48](https://github.com/inaka/cowboy-trails/pull/48) ([harenson](https://github.com/harenson))
 - Allow the user to set and get global api-root path [\#47](https://github.com/inaka/cowboy-trails/pull/47) ([harenson](https://github.com/harenson))

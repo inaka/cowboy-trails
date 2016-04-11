@@ -12,3 +12,5 @@ rel/example_project
 .erlang.mk*
 elvis
 *.d
+/_build
+/rebar.lock

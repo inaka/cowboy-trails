@@ -137,7 +137,7 @@ functions that it exposes, please check this [Example](./example).
 
 ## Testing
 
-This project's test suites includes [meta testing](http://inaka.net/blog/2015/11/13/erlang-meta-test-revisited/).
+This project's test suites include [meta testing](http://inaka.net/blog/2015/11/13/erlang-meta-test-revisited/).
 Therefore, in order to run the tests, it requires a proper plt.
 Otherwise, when you try `make tests`, you'll get an error similar to:
 

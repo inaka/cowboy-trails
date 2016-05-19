@@ -134,3 +134,19 @@ merge them easily.
 
 For more information about `cowboy_trails`, how to use it and the different
 functions that it exposes, please check this [Example](./example).
+
+## Testing
+
+This project's test suites includes [meta testing](http://inaka.net/blog/2015/11/13/erlang-meta-test-revisited/).
+Therefore, in order to run the tests, it requires a proper plt.
+Otherwise, when you try `make tests`, you'll get an error similar to:
+
+```erlang
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ktn_meta_SUITE:dialyzer failed on line 60
+Reason: {test_case_failed,No plts at ../../*.plt - you need to at least have one}
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+```
+
+To generate the required plt, just run `make plt-all` once and then you can
+run `make tests` (or `make quicktests`) as many times as you like.

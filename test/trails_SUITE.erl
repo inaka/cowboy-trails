@@ -25,6 +25,7 @@
 -export([trails_api_root/1]).
 -export([minimal_multiple_host_compile_test/1]).
 -export([minimal_multiple_server_test/1]).
+-export([server_hostmatches/1]).
 
 -dialyzer([{no_opaque, [trails_api_root/1]}]).
 -dialyzer([{no_return, [trails_api_root/1]}]).
@@ -377,6 +378,43 @@ minimal_multiple_server_test(_Config) ->
   notfound = trails:retrieve(unknown_server, "unknown_host", "/path1"),
   {comment, ""}.
 
+-spec server_hostmatches(config()) -> {comment, string()}.
+server_hostmatches(_Config) ->
+  Trails1 = get_trails1(),
+  Trails2 = get_trails2(),
+  Routes1 = [{"hostmatch1", Trails1}, {"hostmatch2", Trails2}],
+  Dispatch1 = trails:compile(Routes1),
+
+  Trails3 = get_trails3(),
+  Routes2 = [{"hostmatch3", Trails3}],
+  Dispatch2 =  trails:compile(Routes2),
+
+  ListenerCount = 10,
+
+  RanchOptions1 = [{port, 8080}],
+  CowboyOptions1 = make_cowboy_options(Dispatch1),
+  {ok, _} =
+    cowboy:start_http(server1, ListenerCount, RanchOptions1, CowboyOptions1),
+
+  RanchOptions2 = [{port, 8081}],
+  CowboyOptions2 = make_cowboy_options(Dispatch2),
+  {ok, _} =
+    cowboy:start_http(server2, ListenerCount, RanchOptions2, CowboyOptions2),
+
+  Servers = trails:servers(),
+  true = lists:member(server1, Servers) andalso lists:member(server2, Servers),
+
+  HostMatches1 = trails:host_matches(server1),
+  true = lists:member(<<"hostmatch1">>, HostMatches1) andalso
+    lists:member(<<"hostmatch2">>, HostMatches1),
+
+  [<<"hostmatch3">>] = trails:host_matches(server2),
+
+  ok = cowboy:stop_listener(server1),
+  ok = cowboy:stop_listener(server2),
+
+  {comment, ""}.
+
 %% @private
 normalize_paths(RoutesPaths) ->
   [normalize_path(Path) || Path <- RoutesPaths].
@@ -404,4 +442,24 @@ get_trails2() ->
     trails:trail("/path3", path3_handler),
     trails:trail("/path4", path4_handler),
     trails:trail("/repeated", repeated_handler)
+  ].
+
+%% @private
+-spec get_trails3() -> [trails:trail()].
+get_trails3() ->
+  [
+    trails:trail("/path5", path5_handler),
+    trails:trail("/path6", path6_handler)
+  ].
+
+%% @private
+-spec make_cowboy_options(cowboy_router:dispatch_rules()) -> [tuple()].
+make_cowboy_options(Dispatch) ->
+  [
+   {env,
+    [
+     {dispatch, Dispatch}
+    ]},
+   {compress, true},
+   {timeout, 12000}
   ].

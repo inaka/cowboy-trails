@@ -18,6 +18,8 @@
 -export([all/0, all/1, all/2]).
 -export([retrieve/1, retrieve/2, retrieve/3]).
 -export([api_root/0, api_root/1]).
+-export([servers/0]).
+-export([host_matches/1]).
 
 %% Trail specification
 -opaque trail() ::
@@ -252,7 +254,18 @@ api_root() ->
 %% @doc Set api_root env param to the given Path.
 -spec api_root(string()) -> ok.
 api_root(Path) ->
-    application:set_env(trails, api_root, Path).
+  application:set_env(trails, api_root, Path).
+
+-spec servers() -> [ranch:ref()].
+servers() ->
+  lists:flatten(ets:match(ranch_server, {{conns_sup, '$1'}, '_'})).
+
+-spec host_matches(ranch:ref()) -> [route_match()].
+host_matches(ServerRef) ->
+  Opts = lists:flatten(ets:match(ranch_server, {{opts, ServerRef}, '$1'})),
+  Env = proplists:get_value(env, Opts, []),
+  Dispatchs = proplists:get_value(dispatch, Env, []),
+  lists:flatten([Host || {Host, _, _} <- Dispatchs]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Private API.

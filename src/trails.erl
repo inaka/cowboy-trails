@@ -265,7 +265,7 @@ host_matches(ServerRef) ->
   Opts = lists:flatten(ets:match(ranch_server, {{opts, ServerRef}, '$1'})),
   Env = proplists:get_value(env, Opts, []),
   Dispatchs = proplists:get_value(dispatch, Env, []),
-  [Host || {[Host], _, _} <- Dispatchs].
+  lists:flatten([Host || {Host, _, _} <- Dispatchs]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Private API.

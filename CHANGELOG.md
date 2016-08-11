@@ -1,5 +1,35 @@
 # Change Log
 
+## [0.2.0](https://github.com/inaka/cowboy-trails/tree/0.2.0) (2016-08-11)
+[Full Changelog](https://github.com/inaka/cowboy-trails/compare/0.1.1...0.2.0)
+
+**Fixed bugs:**
+
+- trails\_meta tests fails [\#60](https://github.com/inaka/cowboy-trails/pull/60) ([jeanparpaillon](https://github.com/jeanparpaillon))
+
+**Closed issues:**
+
+- Move from erlang.mk to rebar3 [\#64](https://github.com/inaka/cowboy-trails/issues/64)
+- Add a function to retrieve the list of registered servers and hostmatches [\#61](https://github.com/inaka/cowboy-trails/issues/61)
+- Update repo and make it ready for hex.pm [\#57](https://github.com/inaka/cowboy-trails/issues/57)
+- How to pass options? [\#56](https://github.com/inaka/cowboy-trails/issues/56)
+- Switch build tools to erlang.mk and republish to hex.pm [\#53](https://github.com/inaka/cowboy-trails/issues/53)
+
+**Merged pull requests:**
+
+- \[Close \#64\] move to rebar3 [\#65](https://github.com/inaka/cowboy-trails/pull/65) ([Euen](https://github.com/Euen))
+- \[Fix \#61\] Add retrieval of registered servers and hostmatches [\#62](https://github.com/inaka/cowboy-trails/pull/62) ([llamallamaduck](https://github.com/llamallamaduck))
+- Update rebar.config to use Hex dependencies [\#59](https://github.com/inaka/cowboy-trails/pull/59) ([waisbrot](https://github.com/waisbrot))
+- \[Fix \#57\] Update dependencies; Update erlang.mk; Add ruleset to elvis config [\#58](https://github.com/inaka/cowboy-trails/pull/58) ([harenson](https://github.com/harenson))
+- Make example using current code version [\#55](https://github.com/inaka/cowboy-trails/pull/55) ([jeanparpaillon](https://github.com/jeanparpaillon))
+
+## [0.1.1](https://github.com/inaka/cowboy-trails/tree/0.1.1) (2016-01-06)
+[Full Changelog](https://github.com/inaka/cowboy-trails/compare/0.1.0...0.1.1)
+
+**Merged pull requests:**
+
+- Hex Package [\#45](https://github.com/inaka/cowboy-trails/pull/45) ([elbrujohalcon](https://github.com/elbrujohalcon))
+
 ## [0.1.0](https://github.com/inaka/cowboy-trails/tree/0.1.0) (2015-11-26)
 [Full Changelog](https://github.com/inaka/cowboy-trails/compare/0.0.2...0.1.0)
 

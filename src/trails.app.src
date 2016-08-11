@@ -17,6 +17,6 @@
            {"Blog", "http://inaka.net/blog/2015/07/20/cowboy-trails/"},
            {"Example", "https://github.com/inaka/cowboy-trails/tree/master/example"}
          ]},
-  {build_tools,["erlang.mk", "rebar"]}
+  {build_tools,["rebar3"]}
  ]
 }.

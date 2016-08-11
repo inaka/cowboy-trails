@@ -178,12 +178,12 @@ store(Server, Trails) ->
 all() ->
   all('_').
 
-%% @doc Retrieves all stored trails for the given `HostMatch`
+%% @doc Retrieves all stored trails for the given `HostMatch'
 -spec all(HostMatch::route_match()) -> [trail()].
 all(HostMatch) ->
   all('_', HostMatch).
 
-%% @doc Retrieves all stored trails for the given `Server` and `HostMatch`
+%% @doc Retrieves all stored trails for the given `Server' and `HostMatch'
 -spec all(Server::ranch:ref(), HostMatch::route_match()) -> [trail()].
 all(Server, HostMatch) ->
   case application:get_application(trails) of
@@ -220,13 +220,13 @@ all(Server, HostMatch) ->
 retrieve(PathMatch) ->
   retrieve('_', PathMatch).
 
-%% @doc Fetch the trail that matches with the given host && path.
+%% @doc Fetch the trail that matches with the given host and path.
 -spec retrieve(HostMatch::route_match(),
                PathMatch::string()) -> trail() | notfound.
 retrieve(HostMatch, PathMatch) ->
   retrieve('_', HostMatch, PathMatch).
 
-%% @doc Fetch the trail that matches with the given server && host && path.
+%% @doc Fetch the trail that matches with the given server and host and path.
 -spec retrieve(Server::ranch:ref(),
                HostMatch::route_match(),
                PathMatch::string()) -> trail() | notfound.

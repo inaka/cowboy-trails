@@ -139,7 +139,7 @@ functions that it exposes, please check this [Example](./example).
 
 This project's test suites include [meta testing](http://inaka.net/blog/2015/11/13/erlang-meta-test-revisited/).
 Therefore, in order to run the tests, it requires a proper plt.
-Otherwise, when you try `make tests`, you'll get an error similar to:
+Otherwise, when you try `rebar3 ct`, you'll get an error similar to:
 
 ```erlang
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -148,5 +148,5 @@ Reason: {test_case_failed,No plts at ../../*.plt - you need to at least have one
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ```
 
-To generate the required plt, just run `make plt-all` once and then you can
-run `make tests` (or `make quicktests`) as many times as you like.
+To generate the required plt, just run `rebar3 dialyzer` once and then you can
+run `rebar3 ct` as many times as you like.

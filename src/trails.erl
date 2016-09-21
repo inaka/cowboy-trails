@@ -42,7 +42,7 @@
   | {Host::route_match(), cowboy_router:constraints(), Paths::[route_path()]}.
 %% End of exported functions
 
--type trails() :: [trails:trail() | route_path()].
+-type trails() :: [trail() | route_path()].
 -export_type([trails/0]).
 
 -type method() :: get | put | post | delete | patch | head | options.
@@ -148,7 +148,7 @@ constraints(Trail) ->
 %%      with `cowboy'). Your handler must implement the callback `trails/0'
 %%      and return the specific routes for that handler. That callback is
 %%      invoked for each given module and then the results are concatenated.
--spec trails(module() | [module()]) -> trails:trails().
+-spec trails(module() | [module()]) -> trails().
 trails(Handlers) when is_list(Handlers) ->
   trails(Handlers, []);
 trails(Handler) ->

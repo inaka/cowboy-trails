@@ -1,6 +1,6 @@
 logs/
 .eunit
-/deps
+deps
 *.o
 *.beam
 *.plt
@@ -12,7 +12,7 @@ rel/example_project
 .erlang.mk*
 elvis
 *.d
-/_build
+_build
 /rebar.lock
 doc
 rebar3.crashdump

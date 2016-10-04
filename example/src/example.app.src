@@ -10,6 +10,7 @@
     ]},
   {modules, []},
   {mod, {example, []}},
-  {start_phases, [ {start_trails_http, []} ]}
+  {start_phases, [ {start_trails_http, []} ]},
+  {build_tools, ["rebar3"]}
  ]
 }.

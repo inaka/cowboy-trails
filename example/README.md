@@ -1,15 +1,17 @@
 # Cowboy Trails Example
 ===
 
-To try this example, you need GNU `make` , `git` and `Erlang` in your PATH.
+To try this example, you need `git` and `Erlang` in your PATH.
 
-```
-  make deps
+```erlang
+
+  rebar3 compile
 ```
 
 To start the example server in a interactive way do this:
-```
-  make app shell
+```erlang
+
+  rebar3 shell
 ```
 
 ## Handlers Description

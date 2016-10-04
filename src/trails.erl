@@ -296,11 +296,11 @@ all_trails([[_Server, _PathMatch, Trail] | T], Acc) ->
   all_trails(T, [Trail | Acc]).
 
 %% @private
--spec normalize_store_input(trails()) -> [trail()].
+-spec normalize_store_input(trails()) -> [map()].
 normalize_store_input(RoutesPaths) ->
   normalize_id(normalize_paths(RoutesPaths)).
 
--spec normalize_id([route_path()]) -> trails().
+-spec normalize_id([route_path()]) -> [map()].
 normalize_id(Trails) ->
   Length = length(Trails),
   AddIdFun = fun(Trail, Id) -> Trail#{ trails_id => Id} end,

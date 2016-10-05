@@ -1,5 +1,18 @@
 # Change Log
 
+## [0.2.1](https://github.com/inaka/cowboy-trails/tree/0.2.1) (2016-10-05)
+[Full Changelog](https://github.com/inaka/cowboy-trails/compare/0.2.0...0.2.1)
+
+**Closed issues:**
+
+- Fix Hex package [\#63](https://github.com/inaka/cowboy-trails/issues/63)
+- Example use unavailable dep [\#54](https://github.com/inaka/cowboy-trails/issues/54)
+
+**Merged pull requests:**
+
+- \[Close \#54\] move example from erlang.mk to rebar3 [\#69](https://github.com/inaka/cowboy-trails/pull/69) ([Euen](https://github.com/Euen))
+- Minor type fixes [\#68](https://github.com/inaka/cowboy-trails/pull/68) ([HernanRivasAcosta](https://github.com/HernanRivasAcosta))
+
 ## [0.2.0](https://github.com/inaka/cowboy-trails/tree/0.2.0) (2016-08-11)
 [Full Changelog](https://github.com/inaka/cowboy-trails/compare/0.1.1...0.2.0)
 
@@ -9,6 +22,7 @@
 
 **Closed issues:**
 
+- Version Bump to 0.2.0 [\#66](https://github.com/inaka/cowboy-trails/issues/66)
 - Move from erlang.mk to rebar3 [\#64](https://github.com/inaka/cowboy-trails/issues/64)
 - Add a function to retrieve the list of registered servers and hostmatches [\#61](https://github.com/inaka/cowboy-trails/issues/61)
 - Update repo and make it ready for hex.pm [\#57](https://github.com/inaka/cowboy-trails/issues/57)
@@ -17,6 +31,7 @@
 
 **Merged pull requests:**
 
+- \[Close \#66\] version bump 0.2.0 [\#67](https://github.com/inaka/cowboy-trails/pull/67) ([Euen](https://github.com/Euen))
 - \[Close \#64\] move to rebar3 [\#65](https://github.com/inaka/cowboy-trails/pull/65) ([Euen](https://github.com/Euen))
 - \[Fix \#61\] Add retrieval of registered servers and hostmatches [\#62](https://github.com/inaka/cowboy-trails/pull/62) ([llamallamaduck](https://github.com/llamallamaduck))
 - Update rebar.config to use Hex dependencies [\#59](https://github.com/inaka/cowboy-trails/pull/59) ([waisbrot](https://github.com/waisbrot))

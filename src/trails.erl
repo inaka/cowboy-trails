@@ -23,7 +23,7 @@
 
 %% Trail specification
 -opaque trail() ::
-  #{ path_match  => cowboy_router:route_match()
+  #{ path_match  => route_match()
    , constraints => cowboy_router:constraints()
    , handler     => module()
    , options     => any()
@@ -119,7 +119,7 @@ trail(PathMatch, ModuleHandler, Options, MetaData, Constraints) ->
    }.
 
 %% @doc Gets the `path_match' from the given `trail'.
--spec path_match(trail()) -> cowboy_router:route_match().
+-spec path_match(trail()) -> route_match().
 path_match(Trail) ->
   maps:get(path_match, Trail, []).
 

@@ -1,5 +1,4 @@
 # Cowboy Trails Example
-===
 
 To try this example, you need `git` and `Erlang` in your PATH.
 

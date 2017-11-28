@@ -395,17 +395,13 @@ server_hostmatches(_Config) ->
   Routes2 = [{"hostmatch3", Trails3}],
   Dispatch2 =  trails:compile(Routes2),
 
-  ListenerCount = 10,
-
   RanchOptions1 = [{port, 8080}],
   CowboyOptions1 = make_cowboy_options(Dispatch1),
-  {ok, _} =
-    cowboy:start_http(server1, ListenerCount, RanchOptions1, CowboyOptions1),
+  {ok, _} = cowboy:start_clear(server1, RanchOptions1, CowboyOptions1),
 
   RanchOptions2 = [{port, 8081}],
   CowboyOptions2 = make_cowboy_options(Dispatch2),
-  {ok, _} =
-    cowboy:start_http(server2, ListenerCount, RanchOptions2, CowboyOptions2),
+  {ok, _} = cowboy:start_clear(server2, RanchOptions2, CowboyOptions2),
 
   Servers = trails:servers(),
   true = lists:member(server1, Servers) andalso lists:member(server2, Servers),
@@ -459,13 +455,9 @@ get_trails3() ->
   ].
 
 %% @private
--spec make_cowboy_options(cowboy_router:dispatch_rules()) -> [tuple()].
+-spec make_cowboy_options(cowboy_router:dispatch_rules()) -> map().
 make_cowboy_options(Dispatch) ->
-  [
-   {env,
-    [
-     {dispatch, Dispatch}
-    ]},
-   {compress, true},
-   {timeout, 12000}
-  ].
+  #{ env      => #{dispatch => Dispatch}
+   , compress => true
+   , timeout  => 12000
+   }.

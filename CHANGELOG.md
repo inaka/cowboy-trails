@@ -1,15 +1,29 @@
 # Change Log
 
+## [1.0.0](https://github.com/inaka/cowboy-trails/tree/1.0.0)
+
+[Full Changelog](https://github.com/inaka/cowboy-trails/compare/0.2.1...1.0.0)
+
+**Merged pull requests:**
+
+- Remove dead hipchat link [\#77](https://github.com/inaka/cowboy-trails/pull/77) ([Euen](https://github.com/Euen))
+- Remove dead hipchat link [\#76](https://github.com/inaka/cowboy-trails/pull/76) ([elbrujohalcon](https://github.com/elbrujohalcon))
+- Review formatting in example [\#75](https://github.com/inaka/cowboy-trails/pull/75) ([lucafavatella](https://github.com/lucafavatella))
+- Correct references to unexported type [\#74](https://github.com/inaka/cowboy-trails/pull/74) ([lucafavatella](https://github.com/lucafavatella))
+- Plant CI [\#73](https://github.com/inaka/cowboy-trails/pull/73) ([lucafavatella](https://github.com/lucafavatella))
+
 ## [0.2.1](https://github.com/inaka/cowboy-trails/tree/0.2.1) (2016-10-05)
 [Full Changelog](https://github.com/inaka/cowboy-trails/compare/0.2.0...0.2.1)
 
 **Closed issues:**
 
+- Version Bump to 0.2.1 [\#70](https://github.com/inaka/cowboy-trails/issues/70)
 - Fix Hex package [\#63](https://github.com/inaka/cowboy-trails/issues/63)
 - Example use unavailable dep [\#54](https://github.com/inaka/cowboy-trails/issues/54)
 
 **Merged pull requests:**
 
+- \[Close \#70\] version bump to 0.2.1 [\#71](https://github.com/inaka/cowboy-trails/pull/71) ([Euen](https://github.com/Euen))
 - \[Close \#54\] move example from erlang.mk to rebar3 [\#69](https://github.com/inaka/cowboy-trails/pull/69) ([Euen](https://github.com/Euen))
 - Minor type fixes [\#68](https://github.com/inaka/cowboy-trails/pull/68) ([HernanRivasAcosta](https://github.com/HernanRivasAcosta))
 

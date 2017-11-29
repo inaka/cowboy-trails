@@ -1,11 +1,24 @@
 # Change Log
 
-## [1.0.0](https://github.com/inaka/cowboy-trails/tree/1.0.0)
+## [2.0.0](https://github.com/inaka/cowboy-trails/tree/2.0.0)
 
+[Full Changelog](https://github.com/inaka/cowboy-trails/compare/1.0.0...2.0.0)
+
+**Closed issues:**
+
+- compatibility with beta of cowboy 2.0x ? [\#72](https://github.com/inaka/cowboy-trails/issues/72)
+
+**Merged pull requests:**
+
+- \[Closes \#72\] Update to Cowboy 2 [\#79](https://github.com/inaka/cowboy-trails/pull/79) ([jfacorro](https://github.com/jfacorro))
+
+## [1.0.0](https://github.com/inaka/cowboy-trails/tree/1.0.0) (2017-11-29)
 [Full Changelog](https://github.com/inaka/cowboy-trails/compare/0.2.1...1.0.0)
 
 **Merged pull requests:**
 
+- Actually move to 1.0.0 [\#80](https://github.com/inaka/cowboy-trails/pull/80) ([elbrujohalcon](https://github.com/elbrujohalcon))
+- Bump version to 1.0.0 [\#78](https://github.com/inaka/cowboy-trails/pull/78) ([jfacorro](https://github.com/jfacorro))
 - Remove dead hipchat link [\#77](https://github.com/inaka/cowboy-trails/pull/77) ([Euen](https://github.com/Euen))
 - Remove dead hipchat link [\#76](https://github.com/inaka/cowboy-trails/pull/76) ([elbrujohalcon](https://github.com/elbrujohalcon))
 - Review formatting in example [\#75](https://github.com/inaka/cowboy-trails/pull/75) ([lucafavatella](https://github.com/lucafavatella))

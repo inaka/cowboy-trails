@@ -262,9 +262,9 @@ servers() ->
 
 -spec host_matches(ranch:ref()) -> [route_match()].
 host_matches(ServerRef) ->
-  Opts = lists:flatten(ets:match(ranch_server, {{opts, ServerRef}, '$1'})),
-  Env = proplists:get_value(env, Opts, []),
-  Dispatchs = proplists:get_value(dispatch, Env, []),
+  [Opts] = lists:flatten(ets:match(ranch_server, {{opts, ServerRef}, '$1'})),
+  Env = maps:get(env, Opts, #{}),
+  Dispatchs = maps:get(dispatch, Env, []),
   lists:flatten([Host || {Host, _, _} <- Dispatchs]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

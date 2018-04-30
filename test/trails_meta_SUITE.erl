@@ -6,8 +6,8 @@
            , xref/1
            , dialyzer/1
            , elvis/1
-           ]
-         }]).
+          ]
+        }]).
 
 -export([ init_per_suite/1
         , end_per_suite/1

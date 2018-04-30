@@ -4,7 +4,6 @@
 
 # cowboy-trails
 Cowboy routes on steroids!
-This is a forked project from inaka. Currently, it supports cowboy 2.0.0-pre5.
 
 ## Contact Us
 If you find any **bugs** or have a **problem** while using this library, please

@@ -4,7 +4,9 @@
   {vsn, git},
   {applications,
     [kernel,
-     stdlib
+     stdlib,
+     ranch,
+     cowboy
     ]},
   {modules, []},
   {mod, {trails_app, []}},

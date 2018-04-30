@@ -24,7 +24,7 @@
 %% Trail specification
 -opaque trail() ::
   #{ path_match  => route_match()
-   , constraints => cowboy_router:constraints()
+   , constraints => cowboy:fields()
    , handler     => module()
    , options     => any()
    , metadata    => metadata(any())
@@ -34,12 +34,9 @@
 %% Exported from cowboy_router.erl
 -type route_match() :: '_' | iodata().
 -type route_path() :: {Path::route_match(), Handler::module(), Opts::any()}
-  | {Path::route_match()
-    , cowboy_router:constraints()
-    , Handler::module()
-    , Opts::any()}.
+  | {Path::route_match(), cowboy:fields(), Handler::module(), Opts::any()}.
 -type route_rule() :: {Host::route_match(), Paths::[route_path()]}
-  | {Host::route_match(), cowboy_router:constraints(), Paths::[route_path()]}.
+  | {Host::route_match(), cowboy:fields(), Paths::[route_path()]}.
 %% End of exported functions
 
 -type trails() :: [trail() | route_path()].
@@ -109,7 +106,7 @@ trail(PathMatch, ModuleHandler, Options, MetaData) ->
            , module()
            , any()
            , map()
-           , cowboy_router:constraints()) -> trail().
+           , cowboy:fields()) -> trail().
 trail(PathMatch, ModuleHandler, Options, MetaData, Constraints) ->
   #{ path_match  => PathMatch
    , handler     => ModuleHandler
@@ -139,7 +136,7 @@ metadata(Trail) ->
   maps:get(metadata, Trail, #{}).
 
 %% @doc Gets the `constraints' from the given `trail'.
--spec constraints(trail()) -> cowboy_router:constraints().
+-spec constraints(trail()) -> cowboy:fields().
 constraints(Trail) ->
   maps:get(constraints, Trail, []).
 

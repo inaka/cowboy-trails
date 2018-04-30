@@ -1,7 +1,19 @@
 # Change Log
 
-## [2.0.0](https://github.com/inaka/cowboy-trails/tree/2.0.0)
+## [2.1.0](https://github.com/inaka/cowboy-trails/tree/2.1.0) (2018-04-30)
+[Full Changelog](https://github.com/inaka/cowboy-trails/compare/2.0.0...2.1.0)
 
+**Closed issues:**
+
+- Update Dependencies [\#85](https://github.com/inaka/cowboy-trails/issues/85)
+- trails:do\_store hangs for 60 seconds [\#82](https://github.com/inaka/cowboy-trails/issues/82)
+
+**Merged pull requests:**
+
+- \[Fix \#85\] Update Dependencies [\#86](https://github.com/inaka/cowboy-trails/pull/86) ([elbrujohalcon](https://github.com/elbrujohalcon))
+- \[\#82\] Don't call ensure\_all\_started from do\_store [\#83](https://github.com/inaka/cowboy-trails/pull/83) ([tothlac](https://github.com/tothlac))
+
+## [2.0.0](https://github.com/inaka/cowboy-trails/tree/2.0.0) (2017-11-29)
 [Full Changelog](https://github.com/inaka/cowboy-trails/compare/1.0.0...2.0.0)
 
 **Closed issues:**
@@ -10,6 +22,7 @@
 
 **Merged pull requests:**
 
+- Bump to 2.0.0 [\#81](https://github.com/inaka/cowboy-trails/pull/81) ([jfacorro](https://github.com/jfacorro))
 - \[Closes \#72\] Update to Cowboy 2 [\#79](https://github.com/inaka/cowboy-trails/pull/79) ([jfacorro](https://github.com/jfacorro))
 
 ## [1.0.0](https://github.com/inaka/cowboy-trails/tree/1.0.0) (2017-11-29)

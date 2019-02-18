@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.2.2](https://github.com/inaka/cowboy-trails/tree/0.2.2) (2019-02-18)
+[Full Changelog](https://github.com/inaka/cowboy-trails/compare/0.2.1...0.2.2)
+
+**Merged pull requests:**
+
+- Fix unknown type cowboy_route:route_match [\#89](https://github.com/inaka/cowboy-trails/pull/89) ([paulo-ferraz-oliveira](https://github.com/paulo-ferraz-oliveira))
+
 ## [0.2.1](https://github.com/inaka/cowboy-trails/tree/0.2.1) (2016-10-05)
 [Full Changelog](https://github.com/inaka/cowboy-trails/compare/0.2.0...0.2.1)
 

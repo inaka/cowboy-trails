@@ -49,6 +49,7 @@ init_per_suite(Config) ->
 
 -spec end_per_suite(config()) -> config().
 end_per_suite(Config) ->
+  _ = application:stop(trails),
   Config.
 
 -spec init_per_testcase(atom(), config()) -> config().

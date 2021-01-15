@@ -8,6 +8,7 @@
 -export([end_per_testcase/2]).
 -export([basic_compile_test/1]).
 -export([minimal_compile_test/1]).
+-export([empty_compile_test/1]).
 -export([static_compile_test/1]).
 -export([minimal_single_host_compile_test/1]).
 -export([basic_single_host_compile_test/1]).
@@ -18,6 +19,9 @@
 -export([static_trails3_constructor/1]).
 -export([static_trails4_constructor/1]).
 -export([basic_metadata/1]).
+-export([handler/1]).
+-export([options/1]).
+-export([constraints/1]).
 -export([basic_trails_routes/1]).
 -export([put_metadata/1]).
 -export([post_metadata/1]).
@@ -77,6 +81,12 @@ minimal_compile_test(_Config) ->
   MininalRoute = [{'_', []}],
   ExpectedResponse = cowboy_router:compile(MininalRoute),
   ExpectedResponse = trails:compile(MininalRoute),
+  {comment, ""}.
+
+-spec empty_compile_test(config()) -> {atom(), string()}.
+empty_compile_test(_Config) ->
+  ExpectedResponse = cowboy_router:compile([]),
+  ExpectedResponse = trails:compile([]),
   {comment, ""}.
 
 -spec basic_compile_test(config()) -> {atom(), string()}.
@@ -202,6 +212,27 @@ static_trails4_constructor(_Config) ->
   ExpectedResponse = cowboy_router:compile(StaticRouteCowboy),
   ExpectedResponse = trails:single_host_compile(StaticPath),
   {comment, ""}.
+
+-spec handler(config()) -> {atom(), string()}.
+handler(_Config) ->
+    Handler = cowboy_static,
+    Trail = trails:trail("/", Handler, [], #{}, []),
+    Handler = trails:handler(Trail),
+    {comment, ""}.
+
+-spec options(config()) -> {atom(), string()}.
+options(_Config) ->
+    Options = {private_file, "index1.html"},
+    Trail = trails:trail("/", cowboy_static, Options, #{}, []),
+    Options = trails:options(Trail),
+    {comment, ""}.
+
+-spec constraints(config()) -> {atom(), string()}.
+constraints(_Config) ->
+    Constraints = [{field, nonempty}],
+    Trail = trails:trail("/", cowboy_static, [], #{}, Constraints),
+    Constraints = trails:constraints(Trail),
+    {comment, ""}.
 
  -spec basic_metadata(config()) -> {atom(), string()}.
 basic_metadata(_Config) ->

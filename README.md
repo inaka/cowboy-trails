@@ -3,6 +3,9 @@
 <img src="https://lh5.googleusercontent.com/-Y1n1Vh4FjLE/TXDZiQ_zSVI/AAAAAAAAAJY/h47az_0MxO0/s1600/Western+backdrop+04.png" height="200" width="100%" />
 
 # cowboy-trails
+
+![build](https://github.com/inaka/cowboy-trails/workflows/build/badge.svg)
+
 Cowboy routes on steroids!
 
 ## Contact Us

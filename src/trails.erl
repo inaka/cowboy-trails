@@ -255,7 +255,7 @@ api_root(Path) ->
 
 -spec servers() -> [ranch:ref()].
 servers() ->
-  lists:flatten(ets:match(ranch_server, {{conns_sup, '$1'}, '_'})).
+  lists:flatten(ets:match(ranch_server, {{conns_sup, '$1', '_'}, '_'})).
 
 -spec host_matches(ranch:ref()) -> [route_match()].
 host_matches(ServerRef) ->

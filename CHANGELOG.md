@@ -1,15 +1,26 @@
 # Changelog
 
+## [2.2.1](https://github.com/inaka/cowboy-trails/tree/2.2.1) (2021-03-25)
+
+[Full Changelog](https://github.com/inaka/cowboy-trails/compare/2.2.0...2.2.1)
+
+**Merged pull requests:**
+
+- Bump some dep.s for OTP 24 compatibility [\#97](https://github.com/inaka/cowboy-trails/pull/97) ([paulo-ferraz-oliveira](https://github.com/paulo-ferraz-oliveira))
+- Prevent compilation warnings on \(upcoming\) OTP 24 [\#96](https://github.com/inaka/cowboy-trails/pull/96) ([paulo-ferraz-oliveira](https://github.com/paulo-ferraz-oliveira))
+
 ## [2.2.0](https://github.com/inaka/cowboy-trails/tree/2.2.0) (2021-01-28)
 
 [Full Changelog](https://github.com/inaka/cowboy-trails/compare/0.2.2...2.2.0)
 
 **Closed issues:**
 
+- Release request [\#94](https://github.com/inaka/cowboy-trails/issues/94)
 - Reach 100% Code Coverage with Tests [\#84](https://github.com/inaka/cowboy-trails/issues/84)
 
 **Merged pull requests:**
 
+- Fix \#94: New release \(2.2.0\) [\#95](https://github.com/inaka/cowboy-trails/pull/95) ([elbrujohalcon](https://github.com/elbrujohalcon))
 - 100% test coverage [\#93](https://github.com/inaka/cowboy-trails/pull/93) ([paulo-ferraz-oliveira](https://github.com/paulo-ferraz-oliveira))
 - Prevent cowboy from breaking CI [\#92](https://github.com/inaka/cowboy-trails/pull/92) ([paulo-ferraz-oliveira](https://github.com/paulo-ferraz-oliveira))
 - GitHub Actions + updated dependencies [\#91](https://github.com/inaka/cowboy-trails/pull/91) ([paulo-ferraz-oliveira](https://github.com/paulo-ferraz-oliveira))

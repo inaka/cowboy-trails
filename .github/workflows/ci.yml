@@ -24,5 +24,6 @@ jobs:
       - run: rebar3 dialyzer
       - run: rebar3 xref
       - run: rebar3 lint
+      - run: rebar3 hank
       - run: rebar3 ct
       - run: rebar3 cover

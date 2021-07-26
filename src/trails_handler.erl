@@ -9,5 +9,6 @@
 %% @doc Returns the cowboy routes defined in the called module.
 -callback trails() -> trails:trails().
 
--spec trails(module()) -> trails:trails().
+-spec trails(module() | {module(), map()}) -> trails:trails().
+trails({Module, Opts}) -> Module:trails(Opts);
 trails(Module) -> Module:trails().

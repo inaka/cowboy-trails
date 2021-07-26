@@ -101,11 +101,11 @@ Dispatch = cowboy_router:compile(Routes),
 ```
 
 But now with `trails` you're able to define the routes on each resource handler.
-The handler must implement the callback `trails/0` and return the specific
+The handler must implement the callback `trails/0` or `trails/1` and return the specific
 routes for that handler. For a better understanding, you can check out the
 examples in the `test` folder ([trails_test_handler](./test/trails_test_handler.erl)).
 
-Once you have implemented the `trails/0` callback on your handlers, you can do
+Once you have implemented the `trails/0` or `trails/1` callback on your handlers, you can do
 something like this:
 
 ```erlang
@@ -116,6 +116,7 @@ Handlers =
   , spts_serpents_handler
   , spts_single_serpent_handler
   , spts_news_handler
+  , {support_params_handler, #{key => value}}
   ],
 Trails =
   [ {"/", cowboy_static, {file, "www/index.html"}}

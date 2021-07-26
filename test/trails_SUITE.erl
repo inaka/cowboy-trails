@@ -312,14 +312,22 @@ basic_trails_routes(_Config) ->
     , {"/api/resource1/[:id]", trails_test_handler, []}
     , {"/api/:id/resource2", trails_test_handler, [arg0]}
     ],
+  ExpectedResponse4 =
+    [ {"/api/resource5/[:id]", trails_test3_handler, []}
+    , {"/api/:id/resource6", trails_test3_handler, [#{test_key => test_value}]}
+    ] ++ ExpectedResponse3,
   Handlers1 = [trails_test_handler, trails_test2_handler],
   Handlers2 = [trails_test2_handler, trails_test_handler],
+  Handlers3 = [{trails_test3_handler, #{test_key => test_value}}],
   Trails1 = StaticRoutes ++ trails:trails(Handlers1),
   ExpectedResponse1 = Trails1,
   Trails2 = StaticRoutes ++ trails:trails(trails_test_handler),
   ExpectedResponse2 = Trails2,
   Trails3 = StaticRoutes ++ trails:trails(Handlers2),
   ExpectedResponse3 = Trails3,
+  Trails4 =  trails:trails(Handlers3) ++ Trails3,
+  ExpectedResponse4 = Trails4,
+
   {comment, ""}.
 
 -spec trails_store(config()) -> {atom(), string()}.

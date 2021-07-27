@@ -325,9 +325,8 @@ basic_trails_routes(_Config) ->
   ExpectedResponse2 = Trails2,
   Trails3 = StaticRoutes ++ trails:trails(Handlers2),
   ExpectedResponse3 = Trails3,
-  Trails4 =  trails:trails(Handlers3) ++ Trails3,
+  Trails4 = trails:trails(Handlers3) ++ Trails3,
   ExpectedResponse4 = Trails4,
-
   {comment, ""}.
 
 -spec trails_store(config()) -> {atom(), string()}.

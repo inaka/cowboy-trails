@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.3.0](https://github.com/inaka/cowboy-trails/tree/2.3.0) (2021-07-28)
+
+[Full Changelog](https://github.com/inaka/cowboy-trails/compare/2.2.1...2.3.0)
+
+**Merged pull requests:**
+
+- Remove unused dep. xref\_runner [\#103](https://github.com/inaka/cowboy-trails/pull/103) ([paulo-ferraz-oliveira](https://github.com/paulo-ferraz-oliveira))
+- Remove error-prone \_meta\_SUITE while creating alias \_test\_ [\#102](https://github.com/inaka/cowboy-trails/pull/102) ([paulo-ferraz-oliveira](https://github.com/paulo-ferraz-oliveira))
+- trails\_handler supports parameter [\#101](https://github.com/inaka/cowboy-trails/pull/101) ([turtleDeng](https://github.com/turtleDeng))
+- Allow for analysis under rebar3\_hank [\#100](https://github.com/inaka/cowboy-trails/pull/100) ([paulo-ferraz-oliveira](https://github.com/paulo-ferraz-oliveira))
+- Increase consumer confidence [\#99](https://github.com/inaka/cowboy-trails/pull/99) ([paulo-ferraz-oliveira](https://github.com/paulo-ferraz-oliveira))
+- Move to a GitHub action \(instead of container-based\) CI approach [\#98](https://github.com/inaka/cowboy-trails/pull/98) ([paulo-ferraz-oliveira](https://github.com/paulo-ferraz-oliveira))
+
 ## [2.2.1](https://github.com/inaka/cowboy-trails/tree/2.2.1) (2021-03-25)
 
 [Full Changelog](https://github.com/inaka/cowboy-trails/compare/2.2.0...2.2.1)

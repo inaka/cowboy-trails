@@ -22,3 +22,35 @@ jobs:
           otp-version: ${{matrix.otp_vsn}}
           rebar3-version: '3.14'
       - run: rebar3 test
+  example:
+    name: Makes sure our example run over ${{matrix.otp_vsn}} and ${{matrix.os}}
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        otp_vsn: [21, 22, 23, 24]
+        os: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: ${{matrix.otp_vsn}}
+          rebar3-version: '3.14'
+      - name: move to `example`
+        run: cd example
+      - name: check our example
+        run: rebar3 test
+      - name: test our example
+        run: |
+          rebar3 release
+          _build/default/rel/example/bin/example daemon
+          R=$(curl -s -w "%{http_code}" -XPUT "localhost:8080/poor-kv/some-key/some-value" -H "content-type: text/plain")
+          [[ $R == "some-value201" ]] || exit 1  # This becomes some-value200 after the first PUT
+          R=$(curl -s -w "%{http_code}" "localhost:8080/poor-kv/some-key" -H "content-type: text/plain")
+          [[ $R == "some-value200" ]] || exit 1
+          R=$(curl -s -w "%{http_code}" "localhost:8080/poor-kv/non-existing-key" -H "content-type: text/plain")
+          [[ $R == "404" ]] || exit 1
+          R=$(curl -s -w "%{http_code}" -XDELETE "localhost:8080/poor-kv/some-key" -H "content-type: text/plain")
+          [[ $R == "204" ]] || exit 1
+          R=$(curl -s -w "%{http_code}" -XDELETE "localhost:8080/poor-kv/some-key" -H "content-type: text/plain")
+          [[ $R == "404" ]] || exit 1
+          _build/default/rel/example/bin/example stop

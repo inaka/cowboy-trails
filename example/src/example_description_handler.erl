@@ -4,8 +4,7 @@
 -mixin([
         {example_default,
          [
-          init/3,
-          rest_init/2,
+          init/2,
           content_types_accepted/2,
           content_types_provided/2,
           resource_exists/2

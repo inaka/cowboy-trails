@@ -2,8 +2,7 @@
 
 -export(
    [
-    init/3,
-    rest_init/2,
+    init/2,
     content_types_accepted/2,
     content_types_provided/2,
     forbidden/2,
@@ -12,11 +11,8 @@
   ).
 
 %% cowboy
-init(_Transport, _Req, _Opts) ->
-  {upgrade, protocol, cowboy_rest}.
-
-rest_init(Req, _Opts) ->
-  {ok, Req, #{}}.
+init(Req, State) ->
+  {cowboy_rest, Req, State}.
 
 content_types_accepted(Req, State) ->
   {[{<<"text/plain">>, handle_put}], Req, State}.
@@ -29,10 +25,10 @@ forbidden(Req, State) ->
 
 resource_exists(Req, State) ->
   case cowboy_req:binding(key, Req) of
-    {undefined, Req1} -> {true, Req1, State};
-    {Key, Req1} ->
+    undefined -> {true, Req, State};
+    Key ->
       case application:get_env(example, Key, undefined) of
-        undefined -> {false, Req1, State};
-        _ -> {true, Req1, State}
+        undefined -> {false, Req, State};
+        _ -> {true, Req, State}
       end
   end.

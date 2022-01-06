@@ -4,8 +4,7 @@
 -mixin([
         {example_default,
          [
-          init/3,
-          rest_init/2,
+          init/2,
           content_types_accepted/2,
           content_types_provided/2,
           resource_exists/2
@@ -41,27 +40,25 @@ allowed_methods(Req, State) ->
 
 %% internal
 handle_get(Req, State) ->
-  {Key, Req1} = cowboy_req:binding(key, Req),
+  Key = cowboy_req:binding(key, Req),
   case application:get_env(example, Key, undefined) of
     undefined ->
-      {ok, Req2} = cowboy_req:reply(404, Req1),
-      {halt, Req2, State};
+      {halt, cowboy_req:reply(404, Req), State};
     Value ->
-      {Value, Req1, State}
+      {Value, Req, State}
   end.
 
 handle_put(Req, State) ->
-  {Key, Req1} = cowboy_req:binding(key, Req),
-  case cowboy_req:binding(value, Req1, undefined) of
-    {undefined, Req2} ->
-      {false, Req2, State};
-    {Value, Req2} ->
+  Key = cowboy_req:binding(key, Req),
+  case cowboy_req:binding(value, Req, undefined) of
+    undefined ->
+      {false, Req, State};
+    Value ->
       application:set_env(example, Key, Value),
-      Req3 = cowboy_req:set_resp_body(Value, Req2),
-      {true, Req3, State}
+      {true, cowboy_req:set_resp_body(Value, Req), State}
   end.
 
 delete_resource(Req, State) ->
-  {Key, Req1} = cowboy_req:binding(key, Req),
+  Key = cowboy_req:binding(key, Req),
   application:unset_env(example, Key),
-  {true, Req1, State}.
+  {true, Req, State}.

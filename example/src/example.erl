@@ -6,6 +6,9 @@
 -export([stop/1]).
 -export([start_phase/3]).
 
+-behaviour(application).
+-hank([{unnecessary_function_arguments, [{start_phase, 3}]}]).
+
 %% application
 %% @doc Starts the application
 start() ->
@@ -38,16 +41,15 @@ start_phase(start_trails_http, _StartType, []) ->
   Trails = trails:trails(Handlers) ++ [DescriptionTrail],
   trails:store(Trails),
   Dispatch = trails:single_host_compile(Trails),
-  RanchOptions = [{port, Port}],
-  CowboyOptions =
-      [
-       {env,
-        [
-         {dispatch, Dispatch}
-        ]},
-       {compress, true},
-       {timeout, 12000}
-      ],
+  CowboyOptions = #{ env => #{ dispatch => Dispatch
+                             }
+                   , request_timeout => 12000
+                   },
   {ok, _} =
-    cowboy:start_http(example_http, ListenerCount, RanchOptions, CowboyOptions),
+    cowboy:start_clear(example_http,
+                       #{ socket_opts => [ {port, Port}
+                                         ]
+                        , num_acceptors => ListenerCount
+                        },
+                       CowboyOptions),
   ok.

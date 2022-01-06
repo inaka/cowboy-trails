@@ -1,17 +1,9 @@
-{application, example,
- [
-  {description,
-   "Cowboy Trails Basic Example."},
+{application,
+ example,
+ [{description, "Cowboy Trails Basic Example."},
   {vsn, "0.1"},
-  {applications,
-    [kernel,
-     stdlib,
-     cowboy,
-     trails
-    ]},
+  {applications, [kernel, stdlib, cowboy, trails]},
   {modules, []},
   {mod, {example, []}},
-  {start_phases, [ {start_trails_http, []} ]},
-  {build_tools, ["rebar3"]}
- ]
-}.
+  {start_phases, [{start_trails_http, []}]},
+  {build_tools, ["rebar3"]}]}.

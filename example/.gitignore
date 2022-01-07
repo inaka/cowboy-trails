@@ -1,13 +1,5 @@
-*.beam
-*.log
-*.plt
-*pem
-.DS_Store
-all.coverdata
-bin
-/deps/mixer
-ebin
+.rebar3
+_build
 erl_crash.dump
 log
-logs
-.erlang.mk.packages.v2
+rebar3.crashdump

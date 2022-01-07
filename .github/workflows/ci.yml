@@ -21,7 +21,9 @@ jobs:
         with:
           otp-version: ${{matrix.otp_vsn}}
           rebar3-version: '3.14'
-      - run: rebar3 test
+      - run: |
+          rm -rf example/_checkouts  # Prevent long running analysis
+          rebar3 test
   example:
     name: Makes sure our example run over ${{matrix.otp_vsn}} and ${{matrix.os}}
     runs-on: ${{matrix.os}}
@@ -35,12 +37,9 @@ jobs:
         with:
           otp-version: ${{matrix.otp_vsn}}
           rebar3-version: '3.14'
-      - name: move to `example`
-        run: cd example
-      - name: check our example
-        run: rebar3 test
       - name: test our example
         run: |
+          cd example
           rebar3 release
           _build/default/rel/example/bin/example daemon
           R=$(curl -s -w "%{http_code}" -XPUT "localhost:8080/poor-kv/some-key/some-value" -H "content-type: text/plain")
@@ -54,3 +53,8 @@ jobs:
           R=$(curl -s -w "%{http_code}" -XDELETE "localhost:8080/poor-kv/some-key" -H "content-type: text/plain")
           [[ $R == "404" ]] || exit 1
           _build/default/rel/example/bin/example stop
+      - name: check our example
+        run: |
+          cd example
+          rm -rf _checkouts  # Prevent long running analysis
+          rebar3 test

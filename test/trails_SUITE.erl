@@ -1,7 +1,5 @@
 -module(trails_SUITE).
 
--author('elbrujohalcon@inaka.net').
-
 -export([all/0]).
 -export([init_per_suite/1]).
 -export([end_per_suite/1]).
@@ -36,6 +34,8 @@
 -dialyzer([{no_return, [trails_api_root/1]}]).
 
 -type config() :: [{atom(), term()}].
+
+-export_type([config/0]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Common test
@@ -281,8 +281,8 @@ trails_store(_Config) ->
          trails:trail("/such/path", http_basic_route, [], #{}),
          trails:trail("/very", http_very, [], #{}),
          trails:trail("/", http_handler, [])],
-    {not_started, trails} = (catch trails:all()),
-    {not_started, trails} = (catch trails:retrieve("/")),
+    {not_started, trails} = trails:all(),
+    {not_started, trails} = trails:retrieve("/"),
     {ok, _} = application:ensure_all_started(trails),
     ok = trails:store(TrailsRaw),
     Trails = normalize_paths(TrailsRaw),

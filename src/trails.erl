@@ -29,7 +29,7 @@
       options => any(),
       metadata => metadata(any())}.
 
--export_type([trail/0]).
+-export_type([trail/0, route_match/0]).
 
 %% Exported from cowboy_router.erl
 -type route_match() :: '_' | iodata().
@@ -53,6 +53,8 @@
 -type metadata(X) :: #{method() => X}.
 
 -export_type([metadata/1]).
+
+-elvis([{elvis_style, no_throw, disable}]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% API

@@ -144,7 +144,7 @@ constraints(Trail) ->
 
 %% @doc This function allows you to define the routes on each resource handler,
 %%      instead of defining them all in one place (as you're required to do
-%%      with `cowboy'). Your handler must implement the callback `trails/0'
+%%      with `cowboy'). Your handler must implement the callback `c:trails_handler:trails/0'
 %%      and return the specific routes for that handler. That callback is
 %%      invoked for each given module and then the results are concatenated.
 -spec trails(module() | [module()]) -> trails().

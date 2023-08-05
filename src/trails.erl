@@ -147,7 +147,7 @@ constraints(Trail) ->
 %%      with `cowboy'). Your handler must implement the callback `c:trails_handler:trails/0'
 %%      and return the specific routes for that handler. That callback is
 %%      invoked for each given module and then the results are concatenated.
--spec trails(module() | [module()]) -> trails().
+-spec trails(module() | [module()] | {module(), map()} | [{module(), map()}]) -> trails().
 trails(Handlers) when is_list(Handlers) ->
     trails(Handlers, []);
 trails(Handler) ->

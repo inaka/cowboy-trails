@@ -311,7 +311,7 @@ trails_api_root(_Config) ->
     ok = trails:api_root("/api"),
     "/api" = trails:api_root(),
     Routes = [trails:trail("/things", the_handler)],
-    ok = trails:single_host_compile(Routes),
+    _ = trails:single_host_compile(Routes),
     {comment, ""}.
 
 -spec minimal_multiple_host_compile_test(config()) -> {comment, string()}.

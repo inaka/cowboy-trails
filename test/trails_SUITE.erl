@@ -37,6 +37,8 @@
 
 -export_type([config/0]).
 
+-elvis([{elvis_style, no_catch_expressions, disable}]).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Common test
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -281,8 +283,8 @@ trails_store(_Config) ->
          trails:trail("/such/path", http_basic_route, [], #{}),
          trails:trail("/very", http_very, [], #{}),
          trails:trail("/", http_handler, [])],
-    {not_started, trails} = trails:all(),
-    {not_started, trails} = trails:retrieve("/"),
+    {not_started, trails} = (catch trails:all()),
+    {not_started, trails} = (catch trails:retrieve("/")),
     {ok, _} = application:ensure_all_started(trails),
     ok = trails:store(TrailsRaw),
     Trails = normalize_paths(TrailsRaw),

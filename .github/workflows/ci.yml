@@ -48,7 +48,9 @@ jobs:
           [[ $R == "404" ]] || exit 1
           _build/default/rel/example/bin/example stop
       - name: Format check
-        run: rebar3 format --verify
+        run: |
+          cd example
+          rebar3 format --verify
       - name: check our example
         run: |
           cd example

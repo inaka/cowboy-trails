@@ -29,7 +29,7 @@ stop(_State) ->
     ok = cowboy:stop_listener(example_http).
 
 % start_listeners() ->
--spec start_phase(atom(), application:start_type(), []) -> ok | {error, term()}.
+-spec start_phase(atom(), application:start_type(), []) -> ok.
 start_phase(start_trails_http, _StartType, []) ->
     {ok, Port} = application:get_env(example, http_port),
     {ok, ListenerCount} = application:get_env(example, http_listener_count),

@@ -104,11 +104,13 @@ Dispatch = cowboy_router:compile(Routes),
 
 But now, with `trails`, you're able to define the routes on each of your resource handlers,
 separately.
-These handlers must implement callback `trails/0` or `trails/1` and return the specific
+These handlers must implement callback `c:trails_handler:trails/0` or `c:trails_handler:trails/1`
+and return the specific
 routes that define them. For a better understanding, you can check out the
-examples in the `test` folder ([trails_test_handler](./test/trails_test_handler.erl)).
+examples in the `test` folder ([trails_test_handler](https://github.com/inaka/cowboy-trails/blob/master/test/trails_test_handler.erl)).
 
-Once you have implemented the `trails/0` or `trails/1` callback on your handlers, you can do
+Once you have implemented the `c:trails_handler:trails/0` or `c:trails_handler:trails/1` callback
+on your handlers, you can do
 something like this:
 
 ```erlang
@@ -137,4 +139,4 @@ merge them easily.
 ## Example
 
 For more information about `cowboy_trails`, how to use it and the different
-functions that it exposes, please check this [example](./example).
+functions that it exposes, please check this [example](https://github.com/inaka/cowboy-trails/blob/master/example).

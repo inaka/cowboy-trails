@@ -1,4 +1,4 @@
-%%% @hidden
+%%% @private
 -module(trails_app).
 
 -behaviour(application).

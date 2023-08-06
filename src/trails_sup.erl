@@ -1,4 +1,4 @@
-%%% @hidden
+%%% @private
 -module(trails_sup).
 
 -behaviour(supervisor).

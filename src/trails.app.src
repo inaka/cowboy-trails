@@ -1,23 +1,15 @@
-{application, trails,
- [
-  {description, "A couple of improvements over Cowboy Routes"},
+{application,
+ trails,
+ [{description, "A couple of improvements over Cowboy Routes"},
   {vsn, git},
-  {applications,
-    [kernel,
-     stdlib,
-     ranch,
-     cowboy
-    ]},
+  {applications, [kernel, stdlib, ranch, cowboy]},
   {modules, []},
   {mod, {trails_app, []}},
   {registered, []},
-  {maintainers,["Inaka"]},
-  {licenses,["Apache 2.0"]},
-  {links,[ {"Github","https://github.com/inaka/cowboy-trails"},
-           {"Docs", "http://inaka.github.io/cowboy-trails/"},
-           {"Blog", "http://inaka.net/blog/2015/07/20/cowboy-trails/"},
-           {"Example", "https://github.com/inaka/cowboy-trails/tree/master/example"}
-         ]},
-  {build_tools,["rebar3"]}
- ]
-}.
+  {maintainers, ["Inaka"]},
+  {licenses, ["Apache 2.0"]},
+  {links,
+   [{"GitHub", "https://github.com/inaka/cowboy-trails"},
+    {"Blog", "https://web.archive.org/web/20160422045517/http://inaka.net/blog/2015/07/20/cowboy-trails/"},
+    {"Example", "https://github.com/inaka/cowboy-trails/tree/master/example"}]},
+  {build_tools, ["rebar3"]}]}.

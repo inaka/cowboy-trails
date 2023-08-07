@@ -6,7 +6,5 @@
 -export([trails/0]).
 
 trails() ->
-  [
-   {"/api/resource3/[:id]", trails_test2_handler, []},
-   {"/api/:id/resource4", trails_test2_handler, [arg0]}
-  ].
+    [{"/api/resource3/[:id]", trails_test2_handler, []},
+     {"/api/:id/resource4", trails_test2_handler, [arg0]}].

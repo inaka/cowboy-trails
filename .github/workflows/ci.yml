@@ -15,6 +15,7 @@ jobs:
         with:
           otp-version: ${{matrix.otp_vsn}}
           rebar3-version: ${{matrix.rebar3_vsn}}
+      - run: rebar3 format --verify
       - run: |
           rm -rf example/_checkouts  # Prevent long running analysis
           rebar3 test

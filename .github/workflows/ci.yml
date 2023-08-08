@@ -34,7 +34,10 @@ jobs:
                 -otp-${{steps.setup-beam.outputs.otp-version}}\
                 -rebar3-${{steps.setup-beam.outputs.rebar3-version}}\
                 -hash-${{hashFiles('rebar.lock')}}"
-      - run: rebar3 test
+      - run: rebar3 format --verify
+      - run: |
+          rm -rf example/_checkouts  # Prevent long running analysis
+          rebar3 test
   example:
     name: Makes sure our example run over ${{matrix.otp_vsn}}
     runs-on: ubuntu-22.04

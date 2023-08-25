@@ -270,8 +270,8 @@ host_matches(ServerRef) ->
         lists:flatten(
             ets:match(ranch_server, {{proto_opts, ServerRef}, '$1'})),
     Env = maps:get(env, Opts, #{}),
-    Dispatchs = maps:get(dispatch, Env, []),
-    lists:flatten([Host || {Host, _, _} <- Dispatchs]).
+    Dispatches = maps:get(dispatch, Env, []),
+    lists:flatten([Host || {Host, _, _} <- Dispatches]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Private API.

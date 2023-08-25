@@ -37,7 +37,7 @@ start_phase(start_trails_http, _StartType, []) ->
         trails:trail(<<"/description">>,
                      example_description_handler,
                      [],
-                     #{get => #{desc => "Retrives trails's server description"}}),
+                     #{get => #{desc => "Retrieves trails's server description"}}),
     Handlers = [example_poor_kv_handler],
     Trails = trails:trails(Handlers) ++ [DescriptionTrail],
     trails:store(Trails),

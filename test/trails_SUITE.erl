@@ -81,9 +81,9 @@ end_per_testcase(_, Config) ->
 
 -spec minimal_compile_test(config()) -> {atom(), string()}.
 minimal_compile_test(_Config) ->
-    MininalRoute = [{'_', []}],
-    ExpectedResponse = cowboy_router:compile(MininalRoute),
-    ExpectedResponse = trails:compile(MininalRoute),
+    MinimalRoute = [{'_', []}],
+    ExpectedResponse = cowboy_router:compile(MinimalRoute),
+    ExpectedResponse = trails:compile(MinimalRoute),
     {comment, ""}.
 
 -spec empty_compile_test(config()) -> {atom(), string()}.
@@ -109,10 +109,10 @@ static_compile_test(_Config) ->
 
 -spec minimal_single_host_compile_test(config()) -> {atom(), string()}.
 minimal_single_host_compile_test(_Config) ->
-    MininalRoute = [{'_', []}],
-    [{_SingleHost, MininalPath}] = MininalRoute,
-    ExpectedResponse = cowboy_router:compile(MininalRoute),
-    ExpectedResponse = trails:single_host_compile(MininalPath),
+    MinimalRoute = [{'_', []}],
+    [{_SingleHost, MinimalPath}] = MinimalRoute,
+    ExpectedResponse = cowboy_router:compile(MinimalRoute),
+    ExpectedResponse = trails:single_host_compile(MinimalPath),
     {comment, ""}.
 
 -spec basic_single_host_compile_test(config()) -> {atom(), string()}.

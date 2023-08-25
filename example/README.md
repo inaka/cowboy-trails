@@ -31,7 +31,7 @@ $ curl -i http://localhost:8080/description
                desc => "Sets an env var in the server"}},
    options => [],path_match => "/poor-kv/:key/[:value]"},
  #{constraints => [],handler => example_description_handler,
-   metadata => #{get => #{desc => "Retrives trails's server description"}},
+   metadata => #{get => #{desc => "Retrieves trails's server description"}},
    options => [],path_match => <<"/description">>}]
 ```
 

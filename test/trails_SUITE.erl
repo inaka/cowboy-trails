@@ -36,10 +36,6 @@
 -nominal config() :: [{atom(), term()}].
 -export_type([config/0]).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Common test
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 -spec all() -> [atom()].
 all() ->
     Exports = ?MODULE:module_info(exports),
@@ -71,10 +67,6 @@ end_per_testcase(trails_api_root, Config) ->
     Config;
 end_per_testcase(_, Config) ->
     Config.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Test Cases
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 -spec minimal_compile_test(config()) -> {atom(), string()}.
 minimal_compile_test(_Config) ->
@@ -436,11 +428,11 @@ server_hostmatches(_Config) ->
 
     {comment, ""}.
 
-%% @private
+-doc false.
 normalize_paths(RoutesPaths) ->
     lists:map(fun normalize_path/1, RoutesPaths).
 
-%% @private
+-doc false.
 normalize_path({PathMatch, ModuleHandler, Options}) ->
     trails:trail(PathMatch, ModuleHandler, Options);
 normalize_path({PathMatch, Constraints, ModuleHandler, Options}) ->
@@ -448,7 +440,7 @@ normalize_path({PathMatch, Constraints, ModuleHandler, Options}) ->
 normalize_path(Trail) ->
     Trail.
 
-%% @private
+-doc false.
 -spec get_trails1() -> [trails:trail()].
 get_trails1() ->
     [
@@ -457,7 +449,7 @@ get_trails1() ->
         trails:trail("/repeated", repeated_handler)
     ].
 
-%% @private
+-doc false.
 -spec get_trails2() -> [trails:trail()].
 get_trails2() ->
     [
@@ -466,12 +458,12 @@ get_trails2() ->
         trails:trail("/repeated", repeated_handler)
     ].
 
-%% @private
+-doc false.
 -spec get_trails3() -> [trails:trail()].
 get_trails3() ->
     [trails:trail("/path5", path5_handler), trails:trail("/path6", path6_handler)].
 
-%% @private
+-doc false.
 -spec make_cowboy_options(cowboy_router:dispatch_rules()) -> map().
 make_cowboy_options(Dispatch) ->
     #{

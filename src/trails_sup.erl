@@ -1,5 +1,5 @@
-%%% @private
 -module(trails_sup).
+-moduledoc false.
 
 -behaviour(supervisor).
 
@@ -15,7 +15,6 @@ init(#{}) ->
     init_ets_table(),
     {ok, {{one_for_one, 10, 60}, []}}.
 
-%% @private
 -spec init_ets_table() -> atom().
 init_ets_table() ->
     ets:new(trails, [public, named_table]).

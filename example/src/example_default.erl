@@ -8,7 +8,6 @@
     resource_exists/2
 ]).
 
-%% cowboy
 init(Req, State) ->
     {cowboy_rest, Req, State}.
 

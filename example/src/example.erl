@@ -8,25 +8,26 @@
 
 -behaviour(application).
 
-%% application
-%% @doc Starts the application
+-doc """
+Starts the application.
+""".
 start() ->
     application:ensure_all_started(example).
 
-%% @doc Stops the application
+-doc """
+Stops the application.
+""".
 stop() ->
     application:stop(example).
 
-%% behaviour
-%% @private
+-doc false.
 start(_StartType, _StartArgs) ->
     example_sup:start_link().
 
-%% @private
+-doc false.
 stop(_State) ->
     ok = cowboy:stop_listener(example_http).
 
-% start_listeners() ->
 -spec start_phase(atom(), application:start_type(), []) -> ok.
 start_phase(start_trails_http, _StartType, []) ->
     {ok, Port} = application:get_env(example, http_port),

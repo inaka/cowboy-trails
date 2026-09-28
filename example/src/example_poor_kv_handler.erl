@@ -10,7 +10,6 @@
 
 -export([allowed_methods/2, handle_put/2, handle_get/2, delete_resource/2]).
 
-%trails
 -behaviour(trails_handler).
 
 -export([trails/0]).
@@ -24,11 +23,9 @@ trails() ->
         },
     [trails:trail("/poor-kv/:key/[:value]", ?MODULE, [], MsgTrailsMetadata)].
 
-%% cowboy
 allowed_methods(Req, State) ->
     {[~"GET", ~"PUT", ~"DELETE", ~"HEAD"], Req, State}.
 
-%% internal
 handle_get(Req, State) ->
     Key = cowboy_req:binding(key, Req),
     case application:get_env(example, Key, undefined) of

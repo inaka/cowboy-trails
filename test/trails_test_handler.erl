@@ -2,7 +2,6 @@
 
 -behaviour(trails_handler).
 
-%% API
 -export([trails/0]).
 
 trails() ->

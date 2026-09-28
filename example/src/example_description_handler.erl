@@ -10,11 +10,9 @@
 
 -export([allowed_methods/2, handle_get/2]).
 
-%% cowboy
 allowed_methods(Req, State) ->
     {[~"GET"], Req, State}.
 
-%% internal
 handle_get(Req, State) ->
     Body = trails:all(),
     {io_lib:format("~p~n", [Body]), Req, State}.

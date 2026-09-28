@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        otp_vsn: ['27', '28', '29']
+        otp_vsn: ['28', '29']
         rebar3_vsn: ['3.27']
     steps:
       - uses: actions/checkout@v7
@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        otp_vsn: ['27', '28', '29']
+        otp_vsn: ['28', '29']
         rebar3_vsn: ['3.27']
     steps:
       - uses: actions/checkout@v7

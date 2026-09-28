@@ -33,8 +33,7 @@
 -dialyzer([{no_opaque, [trails_api_root/1]}]).
 -dialyzer([{no_return, [trails_api_root/1]}]).
 
--type config() :: [{atom(), term()}].
-
+-nominal config() :: [{atom(), term()}].
 -export_type([config/0]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

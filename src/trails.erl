@@ -34,26 +34,21 @@
 -export_type([trail/0, route_match/0]).
 
 %% Exported from cowboy_router.erl
--type route_match() :: '_' | iodata().
--type route_path() ::
+-nominal route_match() :: '_' | iodata().
+-nominal route_path() ::
     {Path :: route_match(), Handler :: module(), Opts :: term()}
     | {Path :: route_match(), cowboy:fields(), Handler :: module(), Opts :: term()}.
--type route_rule() ::
+-nominal route_rule() ::
     {Host :: route_match(), Paths :: [route_path()]}
     | {Host :: route_match(), cowboy:fields(), Paths :: [route_path()]}.
 
-%% End of exported functions
-
--type trails() :: [trail() | route_path()].
-
+-nominal trails() :: [trail() | route_path()].
 -export_type([trails/0]).
 
--type method() :: get | put | post | delete | patch | head | options.
-
+-nominal method() :: get | put | post | delete | patch | head | options.
 -export_type([method/0]).
 
--type metadata(X) :: #{method() => X}.
-
+-nominal metadata(X) :: #{method() => X}.
 -export_type([metadata/1]).
 
 -elvis([{elvis_style, no_throw, disable}]).

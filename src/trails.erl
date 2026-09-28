@@ -23,22 +23,24 @@
 
 %% Trail specification
 -opaque trail() ::
-    #{path_match => route_match(),
-      constraints => cowboy:fields(),
-      handler => module(),
-      options => any(),
-      metadata => metadata(any())}.
+    #{
+        path_match => route_match(),
+        constraints => cowboy:fields(),
+        handler => module(),
+        options => term(),
+        metadata => metadata(term())
+    }.
 
 -export_type([trail/0, route_match/0]).
 
 %% Exported from cowboy_router.erl
 -type route_match() :: '_' | iodata().
 -type route_path() ::
-    {Path :: route_match(), Handler :: module(), Opts :: any()} |
-    {Path :: route_match(), cowboy:fields(), Handler :: module(), Opts :: any()}.
+    {Path :: route_match(), Handler :: module(), Opts :: term()}
+    | {Path :: route_match(), cowboy:fields(), Handler :: module(), Opts :: term()}.
 -type route_rule() ::
-    {Host :: route_match(), Paths :: [route_path()]} |
-    {Host :: route_match(), cowboy:fields(), Paths :: [route_path()]}.
+    {Host :: route_match(), Paths :: [route_path()]}
+    | {Host :: route_match(), cowboy:fields(), Paths :: [route_path()]}.
 
 %% End of exported functions
 
@@ -67,17 +69,14 @@ single_host_compile(Trails) ->
 
 %% @doc Compiles the given list of trails routes, also compatible with
 %%      `cowboy' routes.
--spec compile([{Host :: route_match(), Trails :: trails()}]) ->
-                 cowboy_router:dispatch_rules().
-compile([]) ->
-    [];
+-spec compile([{Host :: route_match(), Trails :: trails()}]) -> cowboy_router:dispatch_rules().
 compile(Routes) ->
-    cowboy_router:compile([{Host, to_route_paths(Trails)} || {Host, Trails} <- Routes]).
+    cowboy_router:compile([{Host, to_route_paths(Trails)} || {Host, Trails} <:- Routes]).
 
 %% @doc Translates the given trails paths into `cowboy' routes.
 -spec to_route_paths([trail()]) -> cowboy_router:routes().
 to_route_paths(Paths) ->
-    [to_route_path(Path) || Path <- Paths].
+    lists:map(fun to_route_path/1, Paths).
 
 %% @doc Translates a trail path into a route rule.
 -spec to_route_path(trail()) -> route_rule().
@@ -97,25 +96,27 @@ trail(PathMatch, ModuleHandler) ->
     trail(PathMatch, ModuleHandler, [], #{}, []).
 
 %% @equiv trail(PathMatch, ModuleHandler, Options, #{}, [])
--spec trail(route_match(), module(), any()) -> trail().
+-spec trail(route_match(), module(), term()) -> trail().
 trail(PathMatch, ModuleHandler, Options) ->
     trail(PathMatch, ModuleHandler, Options, #{}, []).
 
 %% @equiv trail(PathMatch, ModuleHandler, Options, MetaData, [])
--spec trail(route_match(), module(), any(), map()) -> trail().
+-spec trail(route_match(), module(), term(), map()) -> trail().
 trail(PathMatch, ModuleHandler, Options, MetaData) ->
     trail(PathMatch, ModuleHandler, Options, MetaData, []).
 
 %% @doc This function allows you to add additional information to the
 %%      `cowboy' handler, such as: resource path, handler module,
 %%      options and metadata. Normally used to document handlers.
--spec trail(route_match(), module(), any(), map(), cowboy:fields()) -> trail().
+-spec trail(route_match(), module(), term(), map(), cowboy:fields()) -> trail().
 trail(PathMatch, ModuleHandler, Options, MetaData, Constraints) ->
-    #{path_match => PathMatch,
-      handler => ModuleHandler,
-      options => Options,
-      metadata => MetaData,
-      constraints => Constraints}.
+    #{
+        path_match => PathMatch,
+        handler => ModuleHandler,
+        options => Options,
+        metadata => MetaData,
+        constraints => Constraints
+    }.
 
 %% @doc Gets the `path_match' from the given `trail'.
 -spec path_match(trail()) -> route_match().
@@ -128,7 +129,7 @@ handler(Trail) ->
     maps:get(handler, Trail, []).
 
 %% @doc Gets the `options' from the given `trail'.
--spec options(trail()) -> any().
+-spec options(trail()) -> term().
 options(Trail) ->
     maps:get(options, Trail, []).
 
@@ -155,13 +156,15 @@ trails(Handler) ->
 
 %% @doc Store the given list of trails.
 -spec store(Trails :: trails() | [{HostMatch :: route_match(), Trails :: trails()}]) ->
-               ok.
+    ok.
 store(Trails) ->
     store('_', Trails).
 
--spec store(Server :: ranch:ref(),
-            Trails :: trails() | [{HostMatch :: route_match(), Trails :: trails()}]) ->
-               ok.
+-spec store(
+    Server :: ranch:ref(),
+    Trails :: trails() | [{HostMatch :: route_match(), Trails :: trails()}]
+) ->
+    ok.
 store(_Server, []) ->
     ok;
 store(Server, [{HostMatch, Trails} | Hosts]) ->
@@ -195,7 +198,7 @@ all(Server, HostMatch) ->
                         [{{{Server, HostMatch, '$1'}, '$2'}, [], ['$$']}]
                 end,
             Matches = ets:select(trails, MatchSpec),
-            FoundServers = [Srvr || [Srvr, _PathMatch, _Trail] <- Matches],
+            FoundServers = [Srvr || [Srvr | _] = Match <:- Matches, length(Match) =:= 3],
             % Extract unique elements
             Servers = lists:usort(FoundServers),
             % There should be no more than one element in this list.
@@ -226,10 +229,12 @@ retrieve(HostMatch, PathMatch) ->
     retrieve('_', HostMatch, PathMatch).
 
 %% @doc Fetch the trail that matches with the given server and host and path.
--spec retrieve(Server :: ranch:ref(),
-               HostMatch :: route_match(),
-               PathMatch :: string()) ->
-                  trail() | notfound.
+-spec retrieve(
+    Server :: ranch:ref(),
+    HostMatch :: route_match(),
+    PathMatch :: string()
+) ->
+    trail() | notfound.
 retrieve(Server, HostMatch, PathMatch) ->
     case application:get_application(trails) of
         {ok, trails} ->
@@ -262,16 +267,15 @@ api_root(Path) ->
 -spec servers() -> [ranch:ref()].
 servers() ->
     lists:flatten(
-        ets:match(ranch_server, {{conns_sup, '$1', '_'}, '_'})).
+        ets:match(ranch_server, {{conns_sup, '$1', '_'}, '_'})
+    ).
 
 -spec host_matches(ranch:ref()) -> [route_match()].
 host_matches(ServerRef) ->
-    [Opts] =
-        lists:flatten(
-            ets:match(ranch_server, {{proto_opts, ServerRef}, '$1'})),
+    [Opts] = lists:flatten(ets:match(ranch_server, {{proto_opts, ServerRef}, '$1'})),
     Env = maps:get(env, Opts, #{}),
     Dispatches = maps:get(dispatch, Env, []),
-    lists:flatten([Host || {Host, _, _} <- Dispatches]).
+    lists:flatten([Host || {Host, _, _} <:- Dispatches]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Private API.
@@ -284,10 +288,12 @@ trails([Module | T], Acc) ->
     trails(T, Acc ++ trails_handler:trails(Module)).
 
 %% @private
--spec do_store(Server :: ranch:ref(),
-               HostMatch :: route_match(),
-               Trails :: [route_path()]) ->
-                  ok.
+-spec do_store(
+    Server :: ranch:ref(),
+    HostMatch :: route_match(),
+    Trails :: [route_path()]
+) ->
+    ok.
 do_store(_Server, _HostMatch, []) ->
     ok;
 do_store(Server, HostMatch, [Trail = #{path_match := PathMatch} | Trails]) ->
@@ -316,7 +322,7 @@ normalize_id(Trails) ->
 %% @private
 -spec normalize_paths(trails()) -> [trail()].
 normalize_paths(RoutesPaths) ->
-    [normalize_path(Path) || Path <- RoutesPaths].
+    lists:map(fun normalize_path/1, RoutesPaths).
 
 %% @private
 -spec remove_id(trail()) -> trail().

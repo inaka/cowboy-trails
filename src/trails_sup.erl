@@ -8,10 +8,10 @@
 
 -spec start_link() -> {ok, pid()} | {error, term()}.
 start_link() ->
-    supervisor:start_link({local, ?MODULE}, ?MODULE, []).
+    supervisor:start_link({local, ?MODULE}, ?MODULE, #{}).
 
--spec init([]) -> {ok, {{one_for_one, 10, 60}, []}}.
-init([]) ->
+-spec init(#{}) -> {ok, {{one_for_one, 10, 60}, []}}.
+init(#{}) ->
     init_ets_table(),
     {ok, {{one_for_one, 10, 60}, []}}.
 

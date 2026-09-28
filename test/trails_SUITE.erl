@@ -37,8 +37,6 @@
 
 -export_type([config/0]).
 
--elvis([{elvis_style, no_catch_expressions, disable}]).
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Common test
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -46,7 +44,7 @@
 -spec all() -> [atom()].
 all() ->
     Exports = ?MODULE:module_info(exports),
-    [F || {F, 1} <- Exports, F /= module_info].
+    [F || {F, A} <:- Exports, A =:= 1, F =/= module_info].
 
 -spec init_per_suite(config()) -> config().
 init_per_suite(Config) ->
@@ -67,7 +65,7 @@ init_per_testcase(_, Config) ->
     Config.
 
 -spec end_per_testcase(atom(), config()) ->
-                          term() | {fail, term()} | {save_config, config()}.
+    term() | {fail, term()} | {save_config, config()}.
 end_per_testcase(trails_api_root, Config) ->
     meck:unload(cowboy_router),
     application:set_env(trails, api_root, ""),
@@ -133,10 +131,13 @@ static_single_host_compile_test(_Config) ->
 
 basic_trails2_constructor(_Config) ->
     BasicRoute =
-        [{'_',
-          [trails:trail("/such/path", http_basic_route),
-           trails:trail("/very", http_very),
-           trails:trail("/", http_handler)]}],
+        [
+            {'_', [
+                trails:trail("/such/path", http_basic_route),
+                trails:trail("/very", http_very),
+                trails:trail("/", http_handler)
+            ]}
+        ],
     BasicRouteCowboy = get_basic_route(),
     ExpectedResponse = cowboy_router:compile(BasicRouteCowboy),
     ExpectedResponse = trails:compile(BasicRoute),
@@ -144,10 +145,13 @@ basic_trails2_constructor(_Config) ->
 
 basic_trails3_constructor(_Config) ->
     BasicRoute =
-        [{'_',
-          [trails:trail("/such/path", http_basic_route, []),
-           trails:trail("/very", http_very, []),
-           trails:trail("/", http_handler, [])]}],
+        [
+            {'_', [
+                trails:trail("/such/path", http_basic_route, []),
+                trails:trail("/very", http_very, []),
+                trails:trail("/", http_handler, [])
+            ]}
+        ],
     BasicRouteCowboy = get_basic_route(),
     ExpectedResponse = cowboy_router:compile(BasicRouteCowboy),
     ExpectedResponse = trails:compile(BasicRoute),
@@ -164,10 +168,13 @@ static_trails3_constructor(_Config) ->
 
 basic_trails4_constructor(_Config) ->
     BasicRouteTrails =
-        [{'_',
-          [trails:trail("/such/path", http_basic_route, [], #{}),
-           trails:trail("/very", http_very, [], #{}),
-           trails:trail("/", http_handler, [], #{})]}],
+        [
+            {'_', [
+                trails:trail("/such/path", http_basic_route, [], #{}),
+                trails:trail("/very", http_very, [], #{}),
+                trails:trail("/", http_handler, [], #{})
+            ]}
+        ],
     BasicRouteCowboy = get_basic_route(),
     ExpectedResponse = cowboy_router:compile(BasicRouteCowboy),
     ExpectedResponse = trails:compile(BasicRouteTrails),
@@ -229,38 +236,51 @@ get_static_route() ->
     [{'_', [{"/", cowboy_static, {private_file, "index.html"}}]}].
 
 get_basic_route() ->
-    [{'_',
-      [{"/such/path", http_basic_route, []},
-       {"/very", http_very, []},
-       {"/", http_handler, []}]}].
+    [
+        {'_', [
+            {"/such/path", http_basic_route, []},
+            {"/very", http_very, []},
+            {"/", http_handler, []}
+        ]}
+    ].
 
 -spec basic_trails_routes(config()) -> {atom(), string()}.
 basic_trails_routes(_Config) ->
     StaticRoutes =
-        [{"/", cowboy_static, {file, "www/index.html"}},
-         {"/favicon.ico", cowboy_static, {file, "www/assets/favicon.ico"}},
-         {"/assets/[...]", cowboy_static, {dir, "www/assets"}},
-         {"/game/:game_id", cowboy_static, {file, "www/game.html"}}],
+        [
+            {"/", cowboy_static, {file, "www/index.html"}},
+            {"/favicon.ico", cowboy_static, {file, "www/assets/favicon.ico"}},
+            {"/assets/[...]", cowboy_static, {dir, "www/assets"}},
+            {"/game/:game_id", cowboy_static, {file, "www/game.html"}}
+        ],
     ExpectedResponse1 =
-        StaticRoutes
-        ++ [{"/api/resource1/[:id]", trails_test_handler, []},
-            {"/api/:id/resource2", trails_test_handler, [arg0]},
-            {"/api/resource3/[:id]", trails_test2_handler, []},
-            {"/api/:id/resource4", trails_test2_handler, [arg0]}],
+        StaticRoutes ++
+            [
+                {"/api/resource1/[:id]", trails_test_handler, []},
+                {"/api/:id/resource2", trails_test_handler, [arg0]},
+                {"/api/resource3/[:id]", trails_test2_handler, []},
+                {"/api/:id/resource4", trails_test2_handler, [arg0]}
+            ],
     ExpectedResponse2 =
-        StaticRoutes
-        ++ [{"/api/resource1/[:id]", trails_test_handler, []},
-            {"/api/:id/resource2", trails_test_handler, [arg0]}],
+        StaticRoutes ++
+            [
+                {"/api/resource1/[:id]", trails_test_handler, []},
+                {"/api/:id/resource2", trails_test_handler, [arg0]}
+            ],
     ExpectedResponse3 =
-        StaticRoutes
-        ++ [{"/api/resource3/[:id]", trails_test2_handler, []},
-            {"/api/:id/resource4", trails_test2_handler, [arg0]},
-            {"/api/resource1/[:id]", trails_test_handler, []},
-            {"/api/:id/resource2", trails_test_handler, [arg0]}],
+        StaticRoutes ++
+            [
+                {"/api/resource3/[:id]", trails_test2_handler, []},
+                {"/api/:id/resource4", trails_test2_handler, [arg0]},
+                {"/api/resource1/[:id]", trails_test_handler, []},
+                {"/api/:id/resource2", trails_test_handler, [arg0]}
+            ],
     ExpectedResponse4 =
-        [{"/api/resource5/[:id]", trails_test3_handler, []},
-         {"/api/:id/resource6", trails_test3_handler, [#{test_key => test_value}]}]
-        ++ ExpectedResponse3,
+        [
+            {"/api/resource5/[:id]", trails_test3_handler, []},
+            {"/api/:id/resource6", trails_test3_handler, [#{test_key => test_value}]}
+        ] ++
+            ExpectedResponse3,
     Handlers1 = [trails_test_handler, trails_test2_handler],
     Handlers2 = [trails_test2_handler, trails_test_handler],
     Handlers3 = [{trails_test3_handler, #{test_key => test_value}}],
@@ -277,14 +297,24 @@ basic_trails_routes(_Config) ->
 -spec trails_store(config()) -> {atom(), string()}.
 trails_store(_Config) ->
     TrailsRaw =
-        [{"/resource/[:id]", trails_test_handler, []},
-         {"/api/:id/resource", [], trails_test2_handler, [arg0]},
-         trails:trail("/assets/[...]", cowboy_static, {dir, "www/assets"}),
-         trails:trail("/such/path", http_basic_route, [], #{}),
-         trails:trail("/very", http_very, [], #{}),
-         trails:trail("/", http_handler, [])],
-    {not_started, trails} = (catch trails:all()),
-    {not_started, trails} = (catch trails:retrieve("/")),
+        [
+            {"/resource/[:id]", trails_test_handler, []},
+            {"/api/:id/resource", [], trails_test2_handler, [arg0]},
+            trails:trail("/assets/[...]", cowboy_static, {dir, "www/assets"}),
+            trails:trail("/such/path", http_basic_route, [], #{}),
+            trails:trail("/very", http_very, [], #{}),
+            trails:trail("/", http_handler, [])
+        ],
+    try trails:all() of
+        RAll -> ct:fail("Unexpected result ~p", [RAll])
+    catch
+        {not_started, trails} -> ok
+    end,
+    try trails:retrieve("/") of
+        RSlash -> ct:fail("Unexpected result ~p", [RSlash])
+    catch
+        {not_started, trails} -> ok
+    end,
     {ok, _} = application:ensure_all_started(trails),
     ok = trails:store(TrailsRaw),
     Trails = normalize_paths(TrailsRaw),
@@ -398,10 +428,9 @@ server_hostmatches(_Config) ->
 
     HostMatches1 = trails:host_matches(server1),
     true =
-        lists:member(<<"hostmatch1">>, HostMatches1)
-        andalso lists:member(<<"hostmatch2">>, HostMatches1),
+        lists:member(~"hostmatch1", HostMatches1) andalso lists:member(~"hostmatch2", HostMatches1),
 
-    [<<"hostmatch3">>] = trails:host_matches(server2),
+    [~"hostmatch3"] = trails:host_matches(server2),
 
     ok = cowboy:stop_listener(server1),
     ok = cowboy:stop_listener(server2),
@@ -410,7 +439,7 @@ server_hostmatches(_Config) ->
 
 %% @private
 normalize_paths(RoutesPaths) ->
-    [normalize_path(Path) || Path <- RoutesPaths].
+    lists:map(fun normalize_path/1, RoutesPaths).
 
 %% @private
 normalize_path({PathMatch, ModuleHandler, Options}) ->
@@ -423,16 +452,20 @@ normalize_path(Trail) ->
 %% @private
 -spec get_trails1() -> [trails:trail()].
 get_trails1() ->
-    [trails:trail("/path1", path1_handler),
-     trails:trail("/path2", path2_handler),
-     trails:trail("/repeated", repeated_handler)].
+    [
+        trails:trail("/path1", path1_handler),
+        trails:trail("/path2", path2_handler),
+        trails:trail("/repeated", repeated_handler)
+    ].
 
 %% @private
 -spec get_trails2() -> [trails:trail()].
 get_trails2() ->
-    [trails:trail("/path3", path3_handler),
-     trails:trail("/path4", path4_handler),
-     trails:trail("/repeated", repeated_handler)].
+    [
+        trails:trail("/path3", path3_handler),
+        trails:trail("/path4", path4_handler),
+        trails:trail("/repeated", repeated_handler)
+    ].
 
 %% @private
 -spec get_trails3() -> [trails:trail()].
@@ -442,6 +475,8 @@ get_trails3() ->
 %% @private
 -spec make_cowboy_options(cowboy_router:dispatch_rules()) -> map().
 make_cowboy_options(Dispatch) ->
-    #{env => #{dispatch => Dispatch},
-      compress => true,
-      timeout => 12000}.
+    #{
+        env => #{dispatch => Dispatch},
+        compress => true,
+        timeout => 12000
+    }.

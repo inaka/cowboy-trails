@@ -1,9 +1,8 @@
-%%% @private
 -module(trails_app).
+-moduledoc false.
 
 -behaviour(application).
 
-%% Application callbacks
 -export([start/2, stop/1]).
 
 -spec start(term(), term()) -> {error, term()} | {ok, pid()}.

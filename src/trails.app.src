@@ -6,7 +6,7 @@
     {mod, {trails_app, []}},
     {registered, []},
     {maintainers, ["Inaka"]},
-    {licenses, ["Apache 2.0"]},
+    {licenses, ["Apache-2.0"]},
     {links, [
         {"GitHub", "https://github.com/inaka/cowboy-trails"},
         {"Blog",

@@ -1,8 +1,8 @@
 -module(trails_handler).
 -moduledoc """
 Trails handler.
-This behavior defines the callback `trails/0` which must be
-implemented by the different `cowboy` handlers in your project.
+Handlers can implement either the `trails/0` or `trails/1` callback to
+expose the `cowboy` routes in the project.
 """.
 
 -export([trails/1]).

@@ -1,7 +1,7 @@
 -module(trails).
 -moduledoc """
 Trails main interface.
-Use the functions provided in this module to inteact with `trails`.
+Use the functions provided in this module to interact with `trails`.
 """.
 
 -export([single_host_compile/1]).
